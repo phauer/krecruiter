@@ -1,0 +1,21 @@
+version: '3.1'
+services:
+  db:
+    image: "postgres:11.2-alpine"
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "recruitingapp"
+    ports:
+      - 5432:5432
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 90:8080
+    depends_on:
+      - db
+  address-validation-service:
+    build: ./local-dev/address-validation-service/
+    ports:
+      - "5000:5000"
