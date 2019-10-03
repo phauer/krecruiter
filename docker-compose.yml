@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_USER: "user"
       POSTGRES_PASSWORD: "password"
-      POSTGRES_DB: "recruitingapp"
+      POSTGRES_DB: "krecruiter"
     ports:
       - 5432:5432
   adminer:

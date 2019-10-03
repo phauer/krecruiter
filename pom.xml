@@ -5,14 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.0.M2</version>
+        <version>2.2.0.M3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.phauer</groupId>
-    <artifactId>kotlinrecruitingapp</artifactId>
+    <artifactId>krecruiter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>kotlinrecruitingapp</name>
-    <description>Demo project for Spring Boot</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
