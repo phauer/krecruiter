@@ -1,31 +1,18 @@
 package com.phauer.recruitingapp.common
 
-// TODO: timestamps?
+import java.time.Instant
 
 data class ApplicationEntity(
     val id: Int,
-    val applicant: ApplicantEntity,
+    val name: String,
     val jobTitle: String,
     val status: ApplicationState,
-    val isInternalApplication: Boolean
-)
-
-// TODO add reasonable nullable types
-
-data class ApplicantEntity(
-    val firstName: String,
-    val lastName: String,
-    val address: AddressEntity
-)
-
-data class AddressEntity(
-    val street: String,
-    val city: String,
-    val zipCode: String
+    val dateCreated: Instant
 )
 
 enum class ApplicationState {
-    APPLICATION_RECEIVED,
+    RECEIVED,
+    INVITED_TO_INTERVIEW,
     REJECTED,
     EMPLOYED
 }

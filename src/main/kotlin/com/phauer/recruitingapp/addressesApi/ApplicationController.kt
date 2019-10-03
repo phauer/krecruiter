@@ -1,7 +1,5 @@
 package com.phauer.recruitingapp.addressesApi
 
-import com.phauer.recruitingapp.applicationView.ApplicationDAO
-import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api")
 class AddressesController(
-    private val dao: ApplicationDAO,
     private val client: AddressValidationClient
 ) {
     @GetMapping("/addresses")

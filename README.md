@@ -1,4 +1,4 @@
-# Kotlin Recruiting App
+# KRecruiter
 
 ```bash
 

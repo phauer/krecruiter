@@ -7,15 +7,15 @@ services:
       POSTGRES_PASSWORD: "password"
       POSTGRES_DB: "krecruiter"
     ports:
-      - 5432:5432
+      - 6000:5432
   adminer:
     image: adminer
     restart: always
     ports:
-      - 90:8080
+      - 91:8080
     depends_on:
       - db
-  address-validation-service:
-    build: ./local-dev/address-validation-service/
-    ports:
-      - "5000:5000"
+#  address-validation-service:
+#    build: ./local-dev/address-validation-service/
+#    ports:
+#      - "5000:5000"
