@@ -9,9 +9,15 @@ import org.jdbi.v3.sqlobject.statement.SqlUpdate
 interface SchemaCreatorDAO : SqlObject {
 
     @SqlUpdate(
-        """CREATE TABLE IF NOT EXISTS application (
+        """DROP TABLE application"""
+    )
+    fun dropTable()
+
+    @SqlUpdate(
+        """CREATE TABLE application (
             id SERIAL PRIMARY KEY,
-            name VARCHAR(60),
+            firstName VARCHAR(60),
+            lastName VARCHAR(60),
             jobTitle VARCHAR(60),
             status VARCHAR(30),
             dateCreated TIMESTAMP
@@ -26,8 +32,8 @@ interface SchemaCreatorDAO : SqlObject {
 
 
     @SqlBatch(
-        """INSERT INTO application(id, name, jobTitle, status, dateCreated)
-        VALUES (:id, :name, :jobTitle, :status, :dateCreated)"""
+        """INSERT INTO application(id, firstName, lastName, jobTitle, status, dateCreated)
+        VALUES (:id, :firstName, :lastName, :jobTitle, :status, :dateCreated)"""
     )
     fun insert(@BindBean application: List<ApplicationEntity>)
 }

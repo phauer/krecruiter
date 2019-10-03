@@ -20,6 +20,7 @@
         <testcontainers.version>1.12.2</testcontainers.version>
         <jdbi.version>3.10.1</jdbi.version>
         <okhttp.version>4.2.1</okhttp.version>
+        <jackson.version>2.10.0</jackson.version>
     </properties>
 
     <dependencies>
@@ -30,7 +31,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
-            <version>2.10.0</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

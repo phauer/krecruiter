@@ -18,6 +18,7 @@ class SchemaCreator(
 
     override fun run(args: ApplicationArguments) {
         log.info("Start Schema Creation...")
+        dao.dropTable()
         dao.createTable()
         dao.truncateTable()
         val applications = generateApplications()
@@ -25,10 +26,11 @@ class SchemaCreator(
         log.info("Finished Schema Creation.")
     }
 
-    private fun generateApplications() = (0..999).map {
+    private fun generateApplications() = (0..500).map {
         ApplicationEntity(
             id = it,
-            name = faker.name().fullName(),
+            firstName = faker.name().firstName(),
+            lastName = faker.name().lastName(),
             jobTitle = faker.job().title(),
             status = ApplicationState.values().random(),
             dateCreated = faker.date().past(4000, TimeUnit.DAYS).toInstant()

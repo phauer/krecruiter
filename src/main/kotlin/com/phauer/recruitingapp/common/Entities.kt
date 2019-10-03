@@ -4,7 +4,8 @@ import java.time.Instant
 
 data class ApplicationEntity(
     val id: Int,
-    val name: String,
+    val firstName: String,
+    val lastName: String,
     val jobTitle: String,
     val status: ApplicationState,
     val dateCreated: Instant

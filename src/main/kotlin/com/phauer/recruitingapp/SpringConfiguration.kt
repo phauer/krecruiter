@@ -3,7 +3,9 @@ package com.phauer.recruitingapp
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.phauer.recruitingapp.applicationApi.ApplicationDAO
 import com.phauer.recruitingapp.schemaCreation.SchemaCreatorDAO
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
@@ -22,6 +24,7 @@ class SpringConfiguration{
     @Bean
     fun objectMapper() = ObjectMapper()
         .registerKotlinModule()
+        .registerModule(JavaTimeModule())
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
@@ -57,6 +60,8 @@ class SpringConfiguration{
     @Bean
     fun schemaCreatorDao(jdbi: Jdbi) = jdbi.onDemand(SchemaCreatorDAO::class.java)
 
+    @Bean
+    fun applicationDao(jdbi: Jdbi) = jdbi.onDemand(ApplicationDAO::class.java)
 }
 
 object UserAgentInterceptor : Interceptor {
