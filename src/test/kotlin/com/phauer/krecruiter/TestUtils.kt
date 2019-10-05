@@ -1,4 +1,4 @@
-package com.phauer.recruitingapp
+package com.phauer.krecruiter
 
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.SocketPolicy

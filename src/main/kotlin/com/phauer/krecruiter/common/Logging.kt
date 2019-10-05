@@ -1,4 +1,4 @@
-package com.phauer.recruitingapp.common
+package com.phauer.krecruiter.common
 
 
 import org.slf4j.Logger

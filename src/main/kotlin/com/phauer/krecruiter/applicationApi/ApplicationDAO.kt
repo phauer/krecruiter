@@ -1,6 +1,6 @@
-package com.phauer.recruitingapp.applicationApi
+package com.phauer.krecruiter.applicationApi
 
-import com.phauer.recruitingapp.common.ApplicationState
+import com.phauer.krecruiter.common.ApplicationState
 import org.jdbi.v3.sqlobject.SqlObject
 import org.jdbi.v3.sqlobject.statement.SqlQuery
 import java.time.Instant

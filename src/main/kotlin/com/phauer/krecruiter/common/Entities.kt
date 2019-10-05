@@ -1,4 +1,4 @@
-package com.phauer.recruitingapp.common
+package com.phauer.krecruiter.common
 
 import java.time.Instant
 

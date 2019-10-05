@@ -1,4 +1,4 @@
-package com.phauer.recruitingapp
+package com.phauer.krecruiter
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

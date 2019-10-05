@@ -1,4 +1,4 @@
-package com.phauer.recruitingapp.addressesApi
+package com.phauer.krecruiter.addressesApi
 
 import org.springframework.stereotype.Component
 import org.springframework.web.client.HttpClientErrorException
@@ -6,10 +6,6 @@ import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.getForObject
-import org.springframework.web.client.postForEntity
-import org.springframework.web.client.postForObject
-import java.lang.Exception
-import java.lang.RuntimeException
 
 @Component
 class AddressValidationClient (

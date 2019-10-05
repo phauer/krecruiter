@@ -1,6 +1,6 @@
-package com.phauer.recruitingapp.initializer
+package com.phauer.krecruiter.initializer
 
-import com.phauer.recruitingapp.common.ApplicationEntity
+import com.phauer.krecruiter.common.ApplicationEntity
 import org.jdbi.v3.sqlobject.SqlObject
 import org.jdbi.v3.sqlobject.customizer.BindBean
 import org.jdbi.v3.sqlobject.statement.SqlBatch

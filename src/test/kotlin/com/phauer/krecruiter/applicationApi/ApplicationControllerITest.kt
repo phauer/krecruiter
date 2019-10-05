@@ -1,8 +1,8 @@
-package com.phauer.recruitingapp.applicationApi
+package com.phauer.krecruiter.applicationApi
 
-import com.phauer.recruitingapp.PostgreSQLInstance
-import com.phauer.recruitingapp.TestDAO
-import com.phauer.recruitingapp.createMockMvc
+import com.phauer.krecruiter.PostgreSQLInstance
+import com.phauer.krecruiter.TestDAO
+import com.phauer.krecruiter.createMockMvc
 import io.mockk.clearMocks
 import io.mockk.mockk
 import org.jdbi.v3.sqlobject.kotlin.onDemand

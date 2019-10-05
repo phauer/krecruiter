@@ -1,4 +1,4 @@
-package com.phauer.recruitingapp
+package com.phauer.krecruiter
 
 import org.jdbi.v3.core.Jdbi
 import org.postgresql.ds.PGSimpleDataSource

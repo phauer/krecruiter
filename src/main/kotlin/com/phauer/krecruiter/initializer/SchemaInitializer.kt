@@ -1,10 +1,10 @@
-package com.phauer.recruitingapp.initializer
+package com.phauer.krecruiter.initializer
 
 import com.github.javafaker.Faker
-import com.phauer.recruitingapp.common.ApplicantEntity
-import com.phauer.recruitingapp.common.ApplicationEntity
-import com.phauer.recruitingapp.common.ApplicationState
-import com.phauer.recruitingapp.common.logger
+import com.phauer.krecruiter.common.ApplicantEntity
+import com.phauer.krecruiter.common.ApplicationEntity
+import com.phauer.krecruiter.common.ApplicationState
+import com.phauer.krecruiter.common.logger
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
