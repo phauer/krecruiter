@@ -1,6 +1,5 @@
 package com.phauer.recruitingapp.applicationApi
 
-import com.phauer.recruitingapp.common.ApplicationEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -9,10 +8,11 @@ class ApplicationController(
     private val dao: ApplicationDAO
 ) {
 
-    // TODO introduce entity/table applicants with address
+    // TODO start testing (mapping, order, filter) and develop the service this way.
+    // TODO test: applicants with multiple applications with status X
+    // TODO add a Scheduler - maybe it will email
     // TODO POST + calling the addressValidation service
 
-    // test: mapping, order, filter
     @GetMapping("/applications")
     fun getApplications(): List<ApplicationDTO> {
         val applicationEntities = dao.findAllApplications()
@@ -21,7 +21,7 @@ class ApplicationController(
 
 }
 
-private fun ApplicationEntity.mapToDto() = ApplicationDTO(
+private fun ApplicationWithApplicantsEntity.mapToDto() = ApplicationDTO(
     id = this.id,
     fullName = "${this.firstName} ${this.lastName}",
     jobTitle = this.jobTitle,

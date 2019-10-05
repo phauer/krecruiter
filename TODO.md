@@ -1,10 +1,8 @@
 # TODOs
 
-asdf
-
-- github repo
-- alternative to python stub - maybe something with quarkus/micronaut/ktor/http4k
-    - besser: ein docker-container bauen und auf github pushen! ist am einfachsten zu bedienen.
-    - gut add a GET "/" resource that states the usage
-    - noch besser: gleich irgendwo deployen!
-    - try heroku! https://www.heroku.com 
+- bilder erstellen
+    - rest schnittstellen + datenbank tabelle
+- use deployed validation service on heroku!
+- address-validation-service:
+    - aktuell: python + deployed auf heroku + lokal wenn vorher selbst gebaut.
+    - alternative: auf docker hub pushen! und via docker-compose einbinden. damit lokal starten können. bessere lokale entwicklung.

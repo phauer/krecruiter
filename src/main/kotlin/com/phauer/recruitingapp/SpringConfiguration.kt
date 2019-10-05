@@ -6,7 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.phauer.recruitingapp.applicationApi.ApplicationDAO
-import com.phauer.recruitingapp.schemaCreation.SchemaCreatorDAO
+import com.phauer.recruitingapp.initializer.ApplicantInitializerDAO
+import com.phauer.recruitingapp.initializer.ApplicationInitializerDAO
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -58,10 +59,14 @@ class SpringConfiguration{
     }
 
     @Bean
-    fun schemaCreatorDao(jdbi: Jdbi) = jdbi.onDemand(SchemaCreatorDAO::class.java)
+    fun applicationInitializerDAO(jdbi: Jdbi) = jdbi.onDemand(ApplicationInitializerDAO::class.java)
+
+    @Bean
+    fun applicantInitializerDAO(jdbi: Jdbi) = jdbi.onDemand(ApplicantInitializerDAO::class.java)
 
     @Bean
     fun applicationDao(jdbi: Jdbi) = jdbi.onDemand(ApplicationDAO::class.java)
+
 }
 
 object UserAgentInterceptor : Interceptor {
