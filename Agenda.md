@@ -9,5 +9,7 @@
 
 - Integration test with real database. 
     - Fast and Spring-free.
+    - `-noverify -XX:TieredStopAtLevel=1`
+    - use `val` 
 - TestContainer reuse and shortcut during dev
 - Parameterized tests

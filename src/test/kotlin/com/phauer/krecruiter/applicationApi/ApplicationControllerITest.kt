@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import java.time.Clock
 
@@ -31,7 +30,11 @@ internal class ApplicationControllerITest {
 
     private val clock = mockk<Clock>()
     private val testDAO = TestDAO(PostgreSQLInstance.jdbi)
-    private lateinit var mvc: MockMvc
+    private val controller = ApplicationController(
+        dao = PostgreSQLInstance.jdbi.onDemand(),
+        clock = clock
+    )
+    private val mvc = createMockMvc(controller)
 
     @BeforeAll
     fun schemaSetup() {
@@ -39,14 +42,9 @@ internal class ApplicationControllerITest {
     }
 
     @BeforeEach
-    fun setup() {
+    fun clear() {
         clearMocks(clock)
         testDAO.clearTables()
-        val controller = ApplicationController(
-            dao = PostgreSQLInstance.jdbi.onDemand(),
-            clock = clock
-        )
-        mvc = createMockMvc(controller)
     }
 
     @Test

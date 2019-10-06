@@ -1,15 +1,17 @@
 package com.phauer.krecruiter.applicationApi
 
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.time.Clock
 
 @RestController
+@RequestMapping("/applications")
 class ApplicationController(
     private val dao: ApplicationDAO,
     private val clock: Clock
 ) {
-    @GetMapping("/applications")
+    @GetMapping
     fun getApplications(): List<ApplicationDTO> {
         val applicationEntities = dao.findAllApplications()
         return applicationEntities.map { it.mapToDto() }

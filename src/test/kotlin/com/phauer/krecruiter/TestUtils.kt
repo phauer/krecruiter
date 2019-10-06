@@ -20,15 +20,14 @@ fun <T> T.toJson(): String = TestObjects.mapper.writeValueAsString(this)
 
 inline fun <reified T> String.toObject(): T = TestObjects.mapper.readValue(this, T::class.java)
 
-fun Int.toInstant() = Instant.ofEpochSecond(this.toLong())
+fun Int.toInstant(): Instant = Instant.ofEpochSecond(this.toLong())
 
-fun Int.toUUID() = UUID.fromString("00000000-0000-0000-a000-${this.toString().padStart(11, '0')}")
+fun Int.toUUID(): UUID = UUID.fromString("00000000-0000-0000-a000-${this.toString().padStart(11, '0')}")
 
 fun createMockMvc(controller: Any) = MockMvcBuilders
     .standaloneSetup(controller)
     .setViewResolvers(InternalResourceViewResolver())
     .build()
-
 
 fun createMockResponse(
     responseBodyJSON: String = """{"exampleField": "exampleContent"}""",

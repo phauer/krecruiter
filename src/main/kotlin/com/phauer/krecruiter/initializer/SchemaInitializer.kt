@@ -10,6 +10,9 @@ import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
+/**
+ * In a real application, we would use Flyway for schema creation and won't initialize the database with dummy data on startup.
+ */
 @Component
 class SchemaInitializer(
     private val applicationDao: ApplicationInitializerDAO,
