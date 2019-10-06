@@ -2,10 +2,12 @@
    
 - Lifecycle
 - Mock handling
-- Helper methods
+- Helper methods (executing the action, entity creation with default methods, low-level values like Instants)
+- Clock
 
 # ApplicationControllerITest
 
-- Integration test with real database.
+- Integration test with real database. 
+    - Fast and Spring-free.
 - TestContainer reuse and shortcut during dev
 - Parameterized tests

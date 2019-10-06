@@ -26,10 +26,11 @@ class SchemaInitializer(
         applicantDao.dropTable()
 
         applicantDao.createTable()
+        applicationDao.createTable()
+
         val applicants = generateApplicants()
         applicantDao.insert(applicants)
 
-        applicationDao.createTable()
         val applications = generateApplications(applicants)
         applicationDao.insert(applications)
 
