@@ -1,7 +1,9 @@
 package com.phauer.krecruiter.applicationApi
 
+import com.phauer.krecruiter.common.ApplicationState
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.Clock
 
@@ -12,8 +14,10 @@ class ApplicationController(
     private val clock: Clock
 ) {
     @GetMapping
-    fun getApplications(): List<ApplicationDTO> {
-        val applicationEntities = dao.findAllApplications()
+    fun getApplications(
+        @RequestParam state: ApplicationState?
+    ): List<ApplicationDTO> {
+        val applicationEntities = dao.findAllApplications(state)
         return applicationEntities.map { it.mapToDto() }
     }
 
@@ -23,7 +27,7 @@ private fun ApplicationWithApplicantsEntity.mapToDto() = ApplicationDTO(
     id = this.id,
     fullName = "${this.firstName} ${this.lastName}",
     jobTitle = this.jobTitle,
-    status = this.status,
+    state = this.state,
     dateCreated = this.dateCreated
 )
 

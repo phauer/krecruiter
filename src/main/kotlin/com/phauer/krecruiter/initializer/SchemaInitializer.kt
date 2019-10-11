@@ -56,7 +56,7 @@ class SchemaInitializer(
             id = it,
             applicantId = applicants.random().id,
             jobTitle = faker.job().title(),
-            status = ApplicationState.values().random(),
+            state = ApplicationState.values().random(),
             dateCreated = faker.date().past(4000, TimeUnit.DAYS).toInstant()
         )
     }

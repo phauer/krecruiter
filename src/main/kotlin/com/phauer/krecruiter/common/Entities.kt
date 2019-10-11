@@ -6,7 +6,7 @@ data class ApplicationEntity(
     val id: Int,
     val applicantId: Int,
     val jobTitle: String,
-    val status: ApplicationState,
+    val state: ApplicationState,
     val dateCreated: Instant
 )
 

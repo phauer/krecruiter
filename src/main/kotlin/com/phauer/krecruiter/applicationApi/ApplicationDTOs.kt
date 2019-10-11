@@ -7,6 +7,6 @@ data class ApplicationDTO(
     val id: Int,
     val fullName: String,
     val jobTitle: String,
-    val status: ApplicationState,
+    val state: ApplicationState,
     val dateCreated: Instant
 )

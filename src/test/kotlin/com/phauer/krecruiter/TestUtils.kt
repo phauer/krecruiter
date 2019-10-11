@@ -50,7 +50,7 @@ fun createApplicationEntity(
     id = id,
     applicantId = applicantId,
     jobTitle = jobTitle,
-    status = state,
+    state = state,
     dateCreated = dateCreated
 )
 

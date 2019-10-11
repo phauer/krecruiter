@@ -18,15 +18,15 @@ interface ApplicationInitializerDAO : SqlObject {
             id SERIAL PRIMARY KEY,
             applicantId INTEGER REFERENCES applicant(id),
             jobTitle VARCHAR(120),
-            status VARCHAR(50),
+            state VARCHAR(50),
             dateCreated TIMESTAMP
             )"""
     )
     fun createTable()
 
     @SqlBatch(
-        """INSERT INTO application(id, applicantId, jobTitle, status, dateCreated)
-        VALUES (:id, :applicantId, :jobTitle, :status, :dateCreated)"""
+        """INSERT INTO application(id, applicantId, jobTitle, state, dateCreated)
+        VALUES (:id, :applicantId, :jobTitle, :state, :dateCreated)"""
     )
     fun insert(@BindBean applications: List<ApplicationEntity>)
 }

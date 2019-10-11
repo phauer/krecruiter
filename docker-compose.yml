@@ -10,9 +10,8 @@ services:
       - 6000:5432
   adminer:
     image: adminer
-    restart: always
     ports:
-      - 91:8080
+      - 900:8080
     depends_on:
       - db
 #  address-validation-service:
