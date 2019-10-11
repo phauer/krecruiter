@@ -16,6 +16,7 @@ interface ApplicationDAO : SqlObject {
         ON a.applicantId = p.id 
         WHERE 1 = 1
         <if(state)> AND a.state = '<state>' <endif>
+        ORDER by a.dateCreated
     """
     )
     @UseStringTemplateEngine

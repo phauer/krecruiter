@@ -14,14 +14,15 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.get
 import java.time.Clock
+import java.time.Instant
 
 internal class ApplicationControllerITest {
 
-    // TODO test order
     // TODO test clock
     // TODO test: applicants with multiple applications with state X
     // TODO add a Scheduler - maybe it will email
@@ -47,67 +48,87 @@ internal class ApplicationControllerITest {
         testDAO.clearTables()
     }
 
-    @Test
-    fun `return all relevant fields from database`() {
-        testDAO.insert(
-            createApplicantEntity(id = 1, firstName = "John", lastName = "Doe")
-        )
-        testDAO.insert(
-            createApplicationEntity(
-                id = 100,
-                applicantId = 1,
-                jobTitle = "Software Developer",
-                state = ApplicationState.RECEIVED,
-                dateCreated = 100.toInstant()
+    @Nested
+    inner class GetApplications {
+
+        @Test
+        fun `return all relevant fields from database`() {
+            testDAO.insert(
+                createApplicantEntity(id = 1, firstName = "John", lastName = "Doe")
             )
-        )
-
-        val actualResponseDTO = requestApplications()
-
-        assertThat(actualResponseDTO).containsExactly(
-            ApplicationDTO(
-                id = 100,
-                fullName = "John Doe",
-                jobTitle = "Software Developer",
-                state = ApplicationState.RECEIVED,
-                dateCreated = 100.toInstant()
+            testDAO.insert(
+                createApplicationEntity(
+                    id = 100,
+                    applicantId = 1,
+                    jobTitle = "Software Developer",
+                    state = ApplicationState.RECEIVED,
+                    dateCreated = 100.toInstant()
+                )
             )
-        )
-    }
 
-    @Test
-    fun `filter by application state`() {
-        insertApplicationWithApplicant(id = 100, state = ApplicationState.REJECTED)
-        insertApplicationWithApplicant(id = 200, state = ApplicationState.REJECTED)
-        insertApplicationWithApplicant(id = 300, state = ApplicationState.INVITED_TO_INTERVIEW)
-        insertApplicationWithApplicant(id = 400, state = ApplicationState.EMPLOYED)
-        insertApplicationWithApplicant(id = 500, state = ApplicationState.RECEIVED)
+            val actualResponseDTO = requestApplications()
 
-        val actualResponseDTO = requestApplications(state = ApplicationState.REJECTED)
+            assertThat(actualResponseDTO).containsExactly(
+                ApplicationDTO(
+                    id = 100,
+                    fullName = "John Doe",
+                    jobTitle = "Software Developer",
+                    state = ApplicationState.RECEIVED,
+                    dateCreated = 100.toInstant()
+                )
+            )
+        }
 
-        assertThat(actualResponseDTO)
-            .extracting<Int>(ApplicationDTO::id)
-            .containsOnly(100, 200)
-    }
+        @Test
+        fun `filter by application state`() {
+            insertApplicationWithApplicant(id = 100, state = ApplicationState.REJECTED)
+            insertApplicationWithApplicant(id = 200, state = ApplicationState.REJECTED)
+            insertApplicationWithApplicant(id = 300, state = ApplicationState.INVITED_TO_INTERVIEW)
+            insertApplicationWithApplicant(id = 400, state = ApplicationState.EMPLOYED)
+            insertApplicationWithApplicant(id = 500, state = ApplicationState.RECEIVED)
 
-    @Test
-    fun `return all when application state is not set`() {
-        insertApplicationWithApplicant(id = 100, state = ApplicationState.REJECTED)
-        insertApplicationWithApplicant(id = 200, state = ApplicationState.INVITED_TO_INTERVIEW)
+            val actualResponseDTO = requestApplications(state = ApplicationState.REJECTED)
 
-        val actualResponseDTO = requestApplications(state = null)
+            assertThat(actualResponseDTO)
+                .extracting<Int>(ApplicationDTO::id)
+                .containsOnly(100, 200)
+        }
 
-        assertThat(actualResponseDTO)
-            .extracting<Int>(ApplicationDTO::id)
-            .containsOnly(100, 200)
+        @Test
+        fun `return all when application state is not set`() {
+            insertApplicationWithApplicant(id = 100, state = ApplicationState.REJECTED)
+            insertApplicationWithApplicant(id = 200, state = ApplicationState.INVITED_TO_INTERVIEW)
+
+            val actualResponseDTO = requestApplications(state = null)
+
+            assertThat(actualResponseDTO)
+                .extracting<Int>(ApplicationDTO::id)
+                .containsOnly(100, 200)
+        }
+
+
+        @Test
+        fun `order by dateCreated`() {
+            insertApplicationWithApplicant(id = 100, dateCreated = 100.toInstant())
+            insertApplicationWithApplicant(id = 200, dateCreated = 200.toInstant())
+            insertApplicationWithApplicant(id = 300, dateCreated = 3.toInstant())
+
+            val actualResponseDTO = requestApplications()
+
+            assertThat(actualResponseDTO)
+                .extracting<Int>(ApplicationDTO::id)
+                .containsExactly(300, 100, 200)
+        }
+
     }
 
     private fun insertApplicationWithApplicant(
         id: Int = 100,
-        state: ApplicationState = ApplicationState.REJECTED
+        state: ApplicationState = ApplicationState.REJECTED,
+        dateCreated: Instant = 1.toInstant()
     ) {
         testDAO.insert(createApplicantEntity(id = id, firstName = "John", lastName = "Doe"))
-        testDAO.insert(createApplicationEntity(id = id, applicantId = id, state = state))
+        testDAO.insert(createApplicationEntity(id = id, applicantId = id, state = state, dateCreated = dateCreated))
     }
 
     private fun requestApplications(
