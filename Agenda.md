@@ -1,9 +1,18 @@
+- Motivation: Hab eine app geschrieben, die fehlerlos ist... oder vlt doch fehler enthält? Wer weiß das schon? gibt ja keine tests und damit keine beweiß für die korrekte funktionweise!
+
+
+- Focus on writing clean tests! 
+
 # ApplicationControllerTest
    
 - Lifecycle
 - Mock handling
-- Helper methods (executing the action, entity creation with default methods, low-level values like Instants)
+- Helper methods (executing the action, entity creation with default methods, low-level values like Instants, default args)
 - Clock
+- Generel principles:
+    - parameter for whats necessary
+    - leave parameter out that are not necessary
+    - don't assert everything again and again
 
 # ApplicationControllerITest
 

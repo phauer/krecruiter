@@ -7,6 +7,7 @@ import com.phauer.krecruiter.initializer.ApplicationInitializerDAO
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.sqlobject.SqlObject
 import org.jdbi.v3.sqlobject.kotlin.onDemand
+import org.jdbi.v3.sqlobject.statement.SqlQuery
 import org.jdbi.v3.sqlobject.statement.SqlUpdate
 
 class TestDAO(
@@ -36,9 +37,30 @@ class TestDAO(
         applicationDao.insert(applicationEntities.toList())
     }
 
+    fun findOneApplication() = helperDao.findOneApplication()
+    fun findOneApplicant() = helperDao.findOneApplicant()
+
 }
 
 private interface TestDAOHelper : SqlObject {
     @SqlUpdate("TRUNCATE TABLE application, applicant RESTART IDENTITY")
     fun truncateTables()
+
+    @SqlQuery(
+        """
+        SELECT id, applicantId, jobTitle, state, dateCreated 
+        FROM application
+        LIMIT 1
+    """
+    )
+    fun findOneApplication(): ApplicationEntity
+
+    @SqlQuery(
+        """
+        SELECT id, firstName, lastName, street, city, dateCreated 
+        FROM applicant
+        LIMIT 1
+    """
+    )
+    fun findOneApplicant(): ApplicantEntity
 }

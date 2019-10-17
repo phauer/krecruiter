@@ -10,3 +10,11 @@ data class ApplicationDTO(
     val state: ApplicationState,
     val dateCreated: Instant
 )
+
+data class ApplicationCreationDTO(
+    val firstName: String,
+    val lastName: String,
+    val street: String,
+    val city: String,
+    val jobTitle: String
+)

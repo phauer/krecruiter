@@ -3,12 +3,15 @@ package com.phauer.krecruiter.applicationApi
 import com.phauer.krecruiter.PostgreSQLInstance
 import com.phauer.krecruiter.TestDAO
 import com.phauer.krecruiter.TestObjects
+import com.phauer.krecruiter.common.ApiPaths
 import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.createApplicantEntity
 import com.phauer.krecruiter.createApplicationEntity
 import com.phauer.krecruiter.createMockMvc
 import com.phauer.krecruiter.toInstant
+import com.phauer.krecruiter.toJson
 import io.mockk.clearMocks
+import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.jdbi.v3.sqlobject.kotlin.onDemand
@@ -18,15 +21,15 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 import java.time.Clock
 import java.time.Instant
 
 internal class ApplicationControllerITest {
 
-    // TODO test clock
-    // TODO test: applicants with multiple applications with state X
+    // TODO POST resource: exception handling/validation
+    // TODO POST resource: calling the addressValidation service
     // TODO add a Scheduler - maybe it will email
-    // TODO POST + calling the addressValidation service
     // TODO more complexity required? rename applicant to person and introduce recruiter and hiringManager as parts of the application
 
     private val clock = mockk<Clock>()
@@ -120,7 +123,61 @@ internal class ApplicationControllerITest {
                 .containsExactly(300, 100, 200)
         }
 
+        private fun requestApplications(
+            state: ApplicationState? = null
+        ): List<ApplicationDTO> {
+            val responseString = mvc.get(ApiPaths.applications) {
+                if (state != null) {
+                    param("state", state.toString())
+                }
+            }.andExpect {
+                status { isOk }
+                content { contentType(MediaType.APPLICATION_JSON) }
+            }.andReturn().response.contentAsString
+            return TestObjects.mapper.readValue(responseString, TestObjects.applicationDtoListType)
+        }
     }
+
+    @Nested
+    inner class CreateApplication {
+
+        @Test
+        fun `create a correct application`() {
+            every { clock.instant() } returns 1.toInstant()
+            val requestApplication = ApplicationCreationDTO(
+                firstName = "Anna",
+                lastName = "Schmidt",
+                street = "Long Street",
+                city = "Leipzig",
+                jobTitle = "Software Engineer"
+            )
+
+            postApplication(requestApplication)
+
+            with(testDAO.findOneApplication()) {
+                assertThat(jobTitle).isEqualTo("Software Engineer")
+                assertThat(state).isEqualTo(ApplicationState.RECEIVED)
+                assertThat(dateCreated).isEqualTo(1.toInstant())
+            }
+            with(testDAO.findOneApplicant()) {
+                assertThat(firstName).isEqualTo("Anna")
+                assertThat(lastName).isEqualTo("Schmidt")
+                assertThat(city).isEqualTo("Leipzig")
+                assertThat(street).isEqualTo("Long Street")
+                assertThat(dateCreated).isEqualTo(1.toInstant())
+            }
+        }
+
+        private fun postApplication(requestApplication: ApplicationCreationDTO) {
+            mvc.post(ApiPaths.applications) {
+                content = requestApplication.toJson()
+                contentType = MediaType.APPLICATION_JSON
+            }.andExpect {
+                status { isOk }
+            }
+        }
+    }
+
 
     private fun insertApplicationWithApplicant(
         id: Int = 100,
@@ -131,17 +188,5 @@ internal class ApplicationControllerITest {
         testDAO.insert(createApplicationEntity(id = id, applicantId = id, state = state, dateCreated = dateCreated))
     }
 
-    private fun requestApplications(
-        state: ApplicationState? = null
-    ): List<ApplicationDTO> {
-        val responseString = mvc.get("/applications") {
-            if (state != null) {
-                param("state", state.toString())
-            }
-        }.andExpect {
-            status { isOk }
-            content { contentType(MediaType.APPLICATION_JSON) }
-        }.andReturn().response.contentAsString
-        return TestObjects.mapper.readValue(responseString, TestObjects.applicationDtoListType)
-    }
+
 }
