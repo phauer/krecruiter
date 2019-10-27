@@ -1,6 +1,7 @@
 package com.phauer.krecruiter.applicationApi
 
 import com.phauer.krecruiter.common.ApplicantEntity
+import com.phauer.krecruiter.common.ApplicationEntity
 import com.phauer.krecruiter.common.ApplicationState
 import org.jdbi.v3.sqlobject.SqlObject
 import org.jdbi.v3.sqlobject.customizer.Define
@@ -36,7 +37,8 @@ interface ApplicationDAO : SqlObject {
         """INSERT INTO application(applicantId, jobTitle, state, dateCreated)
         VALUES (:applicantId, :jobTitle, :state, :dateCreated)"""
     )
-    fun createApplication(jobTitle: String, applicantId: Int, state: ApplicationState, dateCreated: Instant)
+    @GetGeneratedKeys
+    fun createApplication(jobTitle: String, applicantId: Int, state: ApplicationState, dateCreated: Instant): ApplicationEntity
 }
 
 data class ApplicationWithApplicantsEntity(

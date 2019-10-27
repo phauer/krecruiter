@@ -1,5 +1,5 @@
 - Motivation: Hab eine app geschrieben, die fehlerlos ist... oder vlt doch fehler enthält? Wer weiß das schon? gibt ja keine tests und damit keine beweiß für die korrekte funktionweise!
-
+- Vorbereitung dokumentieren: Docker, Docker-Compose, App starten und aus endpoint "/applications" muss was rauskommen
 
 - Focus on writing clean tests! 
 

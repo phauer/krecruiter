@@ -30,7 +30,7 @@ class SpringConfiguration{
         .setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
     @Bean
-    fun baseHttpClient(): OkHttpClient {
+    fun httpClient(): OkHttpClient {
         val dispatcher = Dispatcher().apply {
             maxRequestsPerHost = 50
             maxRequests = 200

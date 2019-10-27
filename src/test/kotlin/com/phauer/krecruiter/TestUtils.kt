@@ -4,8 +4,8 @@ import com.phauer.krecruiter.applicationApi.ApplicationDTO
 import com.phauer.krecruiter.common.ApplicantEntity
 import com.phauer.krecruiter.common.ApplicationEntity
 import com.phauer.krecruiter.common.ApplicationState
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.SocketPolicy
+import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.QueueDispatcher
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.servlet.view.InternalResourceViewResolver
 import java.time.Instant
@@ -13,6 +13,7 @@ import java.util.UUID
 
 object TestObjects {
     val mapper = SpringConfiguration().objectMapper()
+    val httpClient = SpringConfiguration().httpClient()
     val applicationDtoListType = mapper.typeFactory.constructCollectionType(List::class.java, ApplicationDTO::class.java)
 }
 
@@ -29,16 +30,9 @@ fun createMockMvc(controller: Any) = MockMvcBuilders
     .setViewResolvers(InternalResourceViewResolver())
     .build()
 
-fun createMockResponse(
-    responseBodyJSON: String = """{"exampleField": "exampleContent"}""",
-    responseCode: Int = 200,
-    socketPolicy: SocketPolicy = SocketPolicy.KEEP_OPEN
-): MockResponse = MockResponse()
-    .addHeader("Content-Type", "application/json; charset=utf-8")
-    .addHeader("Cache-Control", "no-cache")
-    .setBody(responseBodyJSON)
-    .setResponseCode(responseCode)
-    .apply { this.socketPolicy = socketPolicy }
+fun MockWebServer.reset() {
+    dispatcher = QueueDispatcher()
+}
 
 fun createApplicationEntity(
     id: Int,

@@ -8,11 +8,14 @@ import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.createApplicantEntity
 import com.phauer.krecruiter.createApplicationEntity
 import com.phauer.krecruiter.createMockMvc
+import com.phauer.krecruiter.reset
 import com.phauer.krecruiter.toInstant
 import com.phauer.krecruiter.toJson
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
 import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.junit.jupiter.api.BeforeAll
@@ -29,16 +32,19 @@ internal class ApplicationControllerITest {
 
     // TODO POST resource: exception handling/validation
     // TODO POST resource: calling the addressValidation service
+    // TODO POST resource: location header
     // TODO add a Scheduler - maybe it will email
     // TODO more complexity required? rename applicant to person and introduce recruiter and hiringManager as parts of the application
 
     private val clock = mockk<Clock>()
-    private val testDAO = TestDAO(PostgreSQLInstance.jdbi)
+    private val validationService = MockWebServer().apply { start() }
     private val controller = ApplicationController(
         dao = PostgreSQLInstance.jdbi.onDemand(),
-        clock = clock
+        clock = clock,
+        addressValidationClient = AddressValidationClient(TestObjects.httpClient, TestObjects.mapper, validationService.url("").toString())
     )
     private val mvc = createMockMvc(controller)
+    private val testDAO = TestDAO(PostgreSQLInstance.jdbi)
 
     @BeforeAll
     fun schemaSetup() {
@@ -49,6 +55,7 @@ internal class ApplicationControllerITest {
     fun clear() {
         clearMocks(clock)
         testDAO.clearTables()
+        validationService.reset()
     }
 
     @Nested
@@ -141,9 +148,12 @@ internal class ApplicationControllerITest {
     @Nested
     inner class CreateApplication {
 
+        // TODO add more tests. see above.
+
         @Test
-        fun `create a correct application`() {
-            every { clock.instant() } returns 1.toInstant()
+        fun `posting an application create a application and and applicant entry in the database with the posted values and the current timestamp`() {
+            mockClock(1.toInstant())
+            validationService.enqueueValidationResponse(code = 200, valid = true)
             val requestApplication = ApplicationCreationDTO(
                 firstName = "Anna",
                 lastName = "Schmidt",
@@ -173,9 +183,13 @@ internal class ApplicationControllerITest {
                 content = requestApplication.toJson()
                 contentType = MediaType.APPLICATION_JSON
             }.andExpect {
-                status { isOk }
+                status { isCreated }
             }
         }
+    }
+
+    private fun mockClock(time: Instant = 1.toInstant()) {
+        every { clock.instant() } returns time
     }
 
 
@@ -190,3 +204,12 @@ internal class ApplicationControllerITest {
 
 
 }
+
+private fun MockWebServer.enqueueValidationResponse(code: Int, valid: Boolean) {
+    val response = MockResponse()
+        .addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+        .setBody(AddressValidationResponseDTO(valid = valid).toJson())
+        .setResponseCode(code)
+    enqueue(response)
+}
+
