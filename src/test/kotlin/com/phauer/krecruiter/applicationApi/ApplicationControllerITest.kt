@@ -30,8 +30,7 @@ import java.time.Instant
 
 internal class ApplicationControllerITest {
 
-    // TODO POST resource: exception handling/validation
-    // TODO POST resource: calling the addressValidation service
+    // TODO check out java testing guide: what else can we test that require special assertions.
     // TODO POST resource: location header
     // TODO add a Scheduler - maybe it will email
     // TODO more complexity required? rename applicant to person and introduce recruiter and hiringManager as parts of the application
@@ -148,13 +147,11 @@ internal class ApplicationControllerITest {
     @Nested
     inner class CreateApplication {
 
-        // TODO add more tests. see above.
-
         @Test
-        fun `posting an application create a application and and applicant entry in the database with the posted values and the current timestamp`() {
+        fun `posting an application creates an application and an applicant entry in the database with the posted values and the current timestamp`() {
             mockClock(1.toInstant())
             validationService.enqueueValidationResponse(code = 200, valid = true)
-            val requestApplication = ApplicationCreationDTO(
+            val requestApplication = createApplicantEntity(
                 firstName = "Anna",
                 lastName = "Schmidt",
                 street = "Long Street",
@@ -162,7 +159,7 @@ internal class ApplicationControllerITest {
                 jobTitle = "Software Engineer"
             )
 
-            postApplication(requestApplication)
+            postApplicationAndExpect201(requestApplication)
 
             with(testDAO.findOneApplication()) {
                 assertThat(jobTitle).isEqualTo("Software Engineer")
@@ -178,20 +175,42 @@ internal class ApplicationControllerITest {
             }
         }
 
-        private fun postApplication(requestApplication: ApplicationCreationDTO) {
-            mvc.post(ApiPaths.applications) {
-                content = requestApplication.toJson()
-                contentType = MediaType.APPLICATION_JSON
-            }.andExpect {
-                status { isCreated }
-            }
+        @Test
+        fun `reject application with invalid address`() {
+            validationService.enqueueValidationResponse(code = 200, valid = false)
+            val requestApplication = createApplicantEntity()
+
+            val response = postApplicationAndGetResponse(requestApplication)
+
+            assertThat(response.status).isEqualTo(400)
+            assertThat(response.contentAsString).containsIgnoringCase("invalid address")
+        }
+
+        @Test
+        fun `return server error if the address validation service is not available`() {
+            validationService.enqueue(MockResponse().setResponseCode(500))
+            val requestApplication = createApplicantEntity()
+
+            val response = postApplicationAndGetResponse(requestApplication)
+
+            assertThat(response.status).isEqualTo(500)
+        }
+
+        private fun postApplicationAndExpect201(requestApplication: ApplicationCreationDTO) = postApplication(requestApplication)
+            .andExpect { status { isCreated } }.andReturn().response
+
+        private fun postApplicationAndGetResponse(requestApplication: ApplicationCreationDTO) = postApplication(requestApplication)
+            .andReturn().response
+
+        private fun postApplication(requestApplication: ApplicationCreationDTO) = mvc.post(ApiPaths.applications) {
+            content = requestApplication.toJson()
+            contentType = MediaType.APPLICATION_JSON
         }
     }
 
     private fun mockClock(time: Instant = 1.toInstant()) {
         every { clock.instant() } returns time
     }
-
 
     private fun insertApplicationWithApplicant(
         id: Int = 100,

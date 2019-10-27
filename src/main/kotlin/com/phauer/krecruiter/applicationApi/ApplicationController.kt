@@ -30,9 +30,6 @@ class ApplicationController(
         return applicationEntities.map { it.mapToDto() }
     }
 
-    // TODO AddressValidationService, validation, location header?
-    // TODO add curl/http example for POST in README
-
     @PostMapping
     fun createApplication(
         @RequestBody applicationDto: ApplicationCreationDTO
@@ -40,8 +37,8 @@ class ApplicationController(
         is Outcome.Success -> {
             when (validationResult.value.valid) {
                 true -> {
-                    val applicationId = createApplicationWithApplicant(applicationDto)
-                    ResponseEntity.created(URI("${ApiPaths.applications}/$applicationId")).build()
+                    val newApplicationId = createApplicationWithApplicant(applicationDto)
+                    ResponseEntity.created(URI("${ApiPaths.applications}/$newApplicationId")).build()
                 }
                 false -> ResponseEntity.badRequest().body("""{ "errorMessage": "Invalid address"}""")
             }

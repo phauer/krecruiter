@@ -1,5 +1,6 @@
 # TODOs
 
+- add curl/http example for POST in README
 - bilder erstellen
     - rest schnittstellen + datenbank tabelle
 - use deployed validation service on heroku!

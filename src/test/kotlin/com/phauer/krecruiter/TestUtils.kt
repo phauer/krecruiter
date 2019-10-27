@@ -1,5 +1,6 @@
 package com.phauer.krecruiter
 
+import com.phauer.krecruiter.applicationApi.ApplicationCreationDTO
 import com.phauer.krecruiter.applicationApi.ApplicationDTO
 import com.phauer.krecruiter.common.ApplicantEntity
 import com.phauer.krecruiter.common.ApplicationEntity
@@ -62,4 +63,18 @@ fun createApplicantEntity(
     street = street,
     city = city,
     dateCreated = dateCreated
+)
+
+fun createApplicantEntity(
+    firstName: String = "John",
+    lastName: String = "Doe",
+    street: String = "Short Ave",
+    city: String = "Cologne",
+    jobTitle: String = "Product Owner"
+) = ApplicationCreationDTO(
+    firstName = firstName,
+    lastName = lastName,
+    street = street,
+    city = city,
+    jobTitle = jobTitle
 )
