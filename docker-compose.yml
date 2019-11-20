@@ -9,7 +9,10 @@ services:
     ports:
       - 6000:5432
   adminer:
-    image: adminer
+    image: "adminer:4.7.5-standalone"
+    environment:
+      ADMINER_DESIGN: "pepa-linha"
+      ADMINER_DEFAULT_SERVER: "db"
     ports:
       - 900:8080
     depends_on:

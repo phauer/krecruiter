@@ -1,9 +1,35 @@
 # KRecruiter
 
-```bash
+Example application to train writing tests with Kotlin. The application uses a database and calls a remote service in order to be as close to the testing reality as possible.  
 
+# Setup
+
+Requirements:
+
+- Docker
+- Docker-Compose
+- Java 11
+- IntelliJ IDEA
+- Optional: HTTP Client httpie or Postman to try the HTTP API 
+
+```bash
+git clone git@github.com:phauer/krecruiter.git
+cd krecruiter
+
+# start a PostgreSQL, adminer, and a stub for the address-validation-service
+docker-compose up
+
+# a) start the RecrutingAppApplication.kt via IntelliJ (recommended)
+# or b) run
+./mvnw spring-boot:run
+
+# test with
+curl localhost:8080/applications
 ```
 
+# Inspect the PostgreSQL
+
+You can use your favorite SQL Client or the [adminer](https://www.adminer.org/) - a simple Web UI that is already started with docker-compose. Open [http://localhost:900/?pgsql=db&username=user&db=krecruiter&ns=public](http://localhost:900/?pgsql=db&username=user&db=krecruiter&ns=public) in the browser. Use `password` for the password. You can also look up the database configuration in the `docker-compose.yml`.
 
 # Trying the API
 
