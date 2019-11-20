@@ -16,14 +16,14 @@ class AddressValidationClient (
 ) {
     fun validateAddress(street: String, city: String): Outcome<AddressValidationResponseDTO> {
         val request = Request.Builder()
-            .get().url("$baseUrl?address=$street,$city")
+            .get().url("$baseUrl/validateAddress?address=$street,$city")
             .build()
         return try {
             val response = client.newCall(request).execute()
             if (response.isSuccessful) {
                 Outcome.Success(response.body!!.string().toObject())
             } else {
-                Outcome.Error("Request failed. URL: ${request.url}. code: ${response.code}. body: ${response.body}")
+                Outcome.Error("Request failed. URL: ${request.url}. code: ${response.code}. body: ${response.body?.string()}")
             }
         } catch (exception: IOException) {
             Outcome.Error("Request failed. URL: ${request.url}", exception)
@@ -34,5 +34,6 @@ class AddressValidationClient (
 }
 
 data class AddressValidationResponseDTO(
+    val address: String,
     val valid: Boolean
 )

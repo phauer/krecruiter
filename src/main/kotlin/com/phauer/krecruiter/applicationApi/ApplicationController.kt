@@ -30,6 +30,7 @@ class ApplicationController(
         return applicationEntities.map { it.mapToDto() }
     }
 
+    // TODO posting invalid content -> ugly jackson response message
     @PostMapping
     fun createApplication(
         @RequestBody applicationDto: ApplicationCreationDTO
@@ -43,7 +44,7 @@ class ApplicationController(
                 false -> ResponseEntity.badRequest().body("""{ "errorMessage": "Invalid address"}""")
             }
         }
-        is Outcome.Error -> ResponseEntity.status(INTERNAL_SERVER_ERROR).build()
+        is Outcome.Error -> ResponseEntity.status(INTERNAL_SERVER_ERROR).body("""{ "errorMessage": "${validationResult.message}"}""")
     }
 
     private fun createApplicationWithApplicant(applicationDto: ApplicationCreationDTO): Int {

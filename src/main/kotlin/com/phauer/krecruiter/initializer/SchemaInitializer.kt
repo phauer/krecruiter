@@ -42,7 +42,7 @@ class SchemaInitializer(
 
     private fun generateApplicants() = (0..applicantAmount).map {
         ApplicantEntity(
-            id = it,
+            id = it * 100000,
             firstName = faker.name().firstName(),
             lastName = faker.name().lastName(),
             street = faker.address().streetAddress(),
@@ -53,7 +53,7 @@ class SchemaInitializer(
 
     private fun generateApplications(applicants: List<ApplicantEntity>) = (0..applicantAmount + 150).map {
         ApplicationEntity(
-            id = it,
+            id = it * 100000,
             applicantId = applicants.random().id,
             jobTitle = faker.job().title(),
             state = ApplicationState.values().random(),

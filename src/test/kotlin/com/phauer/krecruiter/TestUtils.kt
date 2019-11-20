@@ -1,5 +1,7 @@
 package com.phauer.krecruiter
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.type.CollectionType
 import com.phauer.krecruiter.applicationApi.ApplicationCreationDTO
 import com.phauer.krecruiter.applicationApi.ApplicationDTO
 import com.phauer.krecruiter.common.ApplicantEntity
@@ -13,9 +15,9 @@ import java.time.Instant
 import java.util.UUID
 
 object TestObjects {
-    val mapper = SpringConfiguration().objectMapper()
+    val mapper: ObjectMapper = SpringConfiguration().objectMapper()
     val httpClient = SpringConfiguration().httpClient()
-    val applicationDtoListType = mapper.typeFactory.constructCollectionType(List::class.java, ApplicationDTO::class.java)
+    val applicationDtoListType: CollectionType = mapper.typeFactory.constructCollectionType(List::class.java, ApplicationDTO::class.java)
 }
 
 fun <T> T.toJson(): String = TestObjects.mapper.writeValueAsString(this)

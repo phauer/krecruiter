@@ -30,6 +30,7 @@ import java.time.Instant
 
 internal class ApplicationControllerITest {
 
+    // TODO posting invalid json or missing requried fields -> ugly jackson response message
     // TODO check out java testing guide: what else can we test that require special assertions.
     // TODO POST resource: location header
     // TODO add a Scheduler - maybe it will email
@@ -227,7 +228,7 @@ internal class ApplicationControllerITest {
 private fun MockWebServer.enqueueValidationResponse(code: Int, valid: Boolean) {
     val response = MockResponse()
         .addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-        .setBody(AddressValidationResponseDTO(valid = valid).toJson())
+        .setBody(AddressValidationResponseDTO(valid = valid, address = "test address").toJson())
         .setResponseCode(code)
     enqueue(response)
 }

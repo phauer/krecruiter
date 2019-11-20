@@ -14,8 +14,7 @@ services:
       - 900:8080
     depends_on:
       - db
-# TODO push to docker registry
-#  address-validation-service:
-#    build: ./local-dev/address-validation-service/
-#    ports:
-#      - "5000:5000"
+  address-validation-service:
+    image: "phauer/address-validation-service-stub:latest"
+    ports:
+      - "5000:5000"
