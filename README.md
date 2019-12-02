@@ -2,6 +2,10 @@
 
 Example application to train writing tests with Kotlin. The application uses a database and calls a remote service in order to be as close to the testing reality as possible.  
 
+# Big Picture
+
+![KRecruiter Big Picture](docs/krecruiter-big-picture.png)
+
 # Setup
 
 Requirements:
