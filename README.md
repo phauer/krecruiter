@@ -14,7 +14,7 @@ Requirements:
 - Docker-Compose
 - Java 11
 - IntelliJ IDEA
-- Optional: HTTP Client httpie or Postman to try the HTTP API 
+- Optional: HTTP Client [httpie](https://httpie.org/) or [Postman](https://www.getpostman.com/) to try the HTTP API 
 
 ```bash
 git clone git@github.com:phauer/krecruiter.git
