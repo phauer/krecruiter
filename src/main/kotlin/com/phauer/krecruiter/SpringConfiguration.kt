@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 class SpringConfiguration{
 
     @Bean
-    fun objectMapper() = ObjectMapper()
+    fun objectMapper(): ObjectMapper = ObjectMapper()
         .registerKotlinModule()
         .registerModule(JavaTimeModule())
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -45,7 +45,7 @@ class SpringConfiguration{
     }
 
     @Bean
-    fun clock() = Clock.systemUTC()
+    fun clock(): Clock = Clock.systemUTC()
 
     @Bean
     fun jdbi(): Jdbi {
@@ -59,13 +59,13 @@ class SpringConfiguration{
     }
 
     @Bean
-    fun applicationInitializerDAO(jdbi: Jdbi) = jdbi.onDemand(ApplicationInitializerDAO::class.java)
+    fun applicationInitializerDAO(jdbi: Jdbi): ApplicationInitializerDAO = jdbi.onDemand(ApplicationInitializerDAO::class.java)
 
     @Bean
-    fun applicantInitializerDAO(jdbi: Jdbi) = jdbi.onDemand(ApplicantInitializerDAO::class.java)
+    fun applicantInitializerDAO(jdbi: Jdbi): ApplicantInitializerDAO = jdbi.onDemand(ApplicantInitializerDAO::class.java)
 
     @Bean
-    fun applicationDao(jdbi: Jdbi) = jdbi.onDemand(ApplicationDAO::class.java)
+    fun applicationDao(jdbi: Jdbi): ApplicationDAO = jdbi.onDemand(ApplicationDAO::class.java)
 
 }
 
