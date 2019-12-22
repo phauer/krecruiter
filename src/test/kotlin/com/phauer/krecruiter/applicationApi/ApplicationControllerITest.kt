@@ -30,7 +30,7 @@ import java.time.Instant
 
 internal class ApplicationControllerITest {
 
-    // TODO posting invalid json or missing requried fields -> ugly jackson response message
+    // TODO test: posting invalid json or missing requried fields -> ugly jackson response message
     // TODO check out java testing guide: what else can we test that require special assertions.
     // TODO POST resource: location header
     // TODO add a Scheduler - maybe it will email

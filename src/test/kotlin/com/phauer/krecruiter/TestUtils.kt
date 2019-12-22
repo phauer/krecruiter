@@ -7,6 +7,7 @@ import com.phauer.krecruiter.applicationApi.ApplicationDTO
 import com.phauer.krecruiter.common.ApplicantEntity
 import com.phauer.krecruiter.common.ApplicationEntity
 import com.phauer.krecruiter.common.ApplicationState
+import com.phauer.krecruiter.common.ExceptionControllerAdvice
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.QueueDispatcher
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -31,6 +32,7 @@ fun Int.toUUID(): UUID = UUID.fromString("00000000-0000-0000-a000-${this.toStrin
 fun createMockMvc(controller: Any) = MockMvcBuilders
     .standaloneSetup(controller)
     .setViewResolvers(InternalResourceViewResolver())
+    .setControllerAdvice(ExceptionControllerAdvice())
     .build()
 
 fun MockWebServer.reset() {

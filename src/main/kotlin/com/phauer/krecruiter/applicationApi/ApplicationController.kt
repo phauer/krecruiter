@@ -30,7 +30,6 @@ class ApplicationController(
         return applicationEntities.map { it.mapToDto() }
     }
 
-    // TODO posting invalid content -> ugly jackson response message
     @PostMapping
     fun createApplication(
         @RequestBody applicationDto: ApplicationCreationDTO
