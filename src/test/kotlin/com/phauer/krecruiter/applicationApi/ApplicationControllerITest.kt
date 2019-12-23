@@ -11,7 +11,7 @@ import com.phauer.krecruiter.createMockMvc
 import com.phauer.krecruiter.reset
 import com.phauer.krecruiter.toInstant
 import com.phauer.krecruiter.toJson
-import io.mockk.clearMocks
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
@@ -51,7 +51,7 @@ internal class ApplicationControllerITest {
 
     @BeforeEach
     fun clear() {
-        clearMocks(clock)
+        clearAllMocks()
         testDAO.clearTables()
         validationService.reset()
     }
@@ -277,4 +277,3 @@ private fun MockWebServer.enqueueValidationResponse(code: Int, valid: Boolean) {
         .setResponseCode(code)
     enqueue(response)
 }
-

@@ -48,10 +48,10 @@ class ApplicationController(
 
     private fun createApplicationWithApplicant(applicationDto: ApplicationCreationDTO): Int {
         val now = clock.instant()
-        val applicant =
+        val applicantId =
             dao.createApplicant(applicationDto.firstName, applicationDto.lastName, applicationDto.street, applicationDto.city, now)
-        val application = dao.createApplication(applicationDto.jobTitle, applicant.id, ApplicationState.RECEIVED, now)
-        return application.id
+        val applicationId = dao.createApplication(applicationDto.jobTitle, applicantId, ApplicationState.RECEIVED, now)
+        return applicationId
     }
 }
 

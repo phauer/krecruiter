@@ -1,7 +1,6 @@
 # TODOs
 
 - mock-based unit tests:
-    - Controller
     - DAO
     - Client
 - write md file containing all required tests. mark the one that should be tackled with mock-based setup.
