@@ -9,7 +9,7 @@ import javax.sql.DataSource
 
 object PostgreSQLInstance {
 
-    val jdbi by lazy { Jdbi.create(createDataSource()).installPlugins() }
+    val jdbi: Jdbi by lazy { Jdbi.create(createDataSource()).installPlugins() }
 
     private fun createDataSource(): DataSource = if (isRunningLocally("localhost", 6000)) {
         PGSimpleDataSource().apply {
