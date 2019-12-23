@@ -22,19 +22,17 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import java.time.Clock
 import java.time.Instant
+import java.util.stream.Stream
 
 internal class ApplicationControllerITest {
-
-    // TODO test: posting invalid json or missing requried fields -> ugly jackson response message
-    // TODO check out java testing guide: what else can we test that require special assertions.
-    // TODO POST resource: location header
-    // TODO add a Scheduler - maybe it will email
-    // TODO more complexity required? rename applicant to person and introduce recruiter and hiringManager as parts of the application
 
     private val clock = mockk<Clock>()
     private val validationService = MockWebServer().apply { start() }
@@ -162,12 +160,12 @@ internal class ApplicationControllerITest {
 
             postApplicationAndExpect201(requestApplication)
 
-            with(testDAO.findOneApplication()) {
+            with(testDAO.findOneApplication()!!) {
                 assertThat(jobTitle).isEqualTo("Software Engineer")
                 assertThat(state).isEqualTo(ApplicationState.RECEIVED)
                 assertThat(dateCreated).isEqualTo(1.toInstant())
             }
-            with(testDAO.findOneApplicant()) {
+            with(testDAO.findOneApplicant()!!) {
                 assertThat(firstName).isEqualTo("Anna")
                 assertThat(lastName).isEqualTo("Schmidt")
                 assertThat(city).isEqualTo("Leipzig")
@@ -197,6 +195,47 @@ internal class ApplicationControllerITest {
             assertThat(response.status).isEqualTo(500)
         }
 
+        @ParameterizedTest
+        @MethodSource("missingFieldDtoProvider")
+        fun `dont create application and return a 400 if an required field is missing`(dtoWithMissingField: MissingFieldApplicationDTO) {
+            postApplicationAndExpect400(dtoWithMissingField.toJson())
+            assertThat(testDAO.findOneApplication()).isNull()
+            assertThat(testDAO.findOneApplicant()).isNull()
+        }
+
+        @ParameterizedTest
+        @ValueSource(
+            strings = [
+                """""",
+                """asdfasfd""",
+                """2""",
+                """{}""",
+                """{"1":"a"}""",
+                """[]"""
+            ]
+        )
+        fun `dont create application and return a 400 if an invalid json is passed`(invalidJson: String) {
+            postApplicationAndExpect400(invalidJson)
+            assertThat(testDAO.findOneApplication()).isNull()
+            assertThat(testDAO.findOneApplicant()).isNull()
+        }
+
+        private fun missingFieldDtoProvider() = Stream.of(
+            MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = "street", city = "city", jobTitle = null)
+            , MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = "street", city = null, jobTitle = "title")
+            , MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = null, city = "city", jobTitle = "title")
+            , MissingFieldApplicationDTO(firstName = "name1", lastName = null, street = "street", city = "city", jobTitle = "title")
+            , MissingFieldApplicationDTO(firstName = null, lastName = "name2", street = "street", city = "city", jobTitle = "title")
+        )
+
+        private fun postApplicationAndExpect400(json: String) {
+            mvc.post(ApiPaths.applications) {
+                content = json
+                contentType = MediaType.APPLICATION_JSON
+            }
+                .andExpect { status { isBadRequest } }
+        }
+
         private fun postApplicationAndExpect201(requestApplication: ApplicationCreationDTO) = postApplication(requestApplication)
             .andExpect { status { isCreated } }.andReturn().response
 
@@ -221,9 +260,15 @@ internal class ApplicationControllerITest {
         testDAO.insert(createApplicantEntity(id = id, firstName = "John", lastName = "Doe"))
         testDAO.insert(createApplicationEntity(id = id, applicantId = id, state = state, dateCreated = dateCreated))
     }
-
-
 }
+
+data class MissingFieldApplicationDTO(
+    val firstName: String?,
+    val lastName: String?,
+    val street: String?,
+    val city: String?,
+    val jobTitle: String?
+)
 
 private fun MockWebServer.enqueueValidationResponse(code: Int, valid: Boolean) {
     val response = MockResponse()

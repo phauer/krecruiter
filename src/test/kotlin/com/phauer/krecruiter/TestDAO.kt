@@ -53,7 +53,7 @@ private interface TestDAOHelper : SqlObject {
         LIMIT 1
     """
     )
-    fun findOneApplication(): ApplicationEntity
+    fun findOneApplication(): ApplicationEntity?
 
     @SqlQuery(
         """
@@ -62,5 +62,5 @@ private interface TestDAOHelper : SqlObject {
         LIMIT 1
     """
     )
-    fun findOneApplicant(): ApplicantEntity
+    fun findOneApplicant(): ApplicantEntity?
 }
