@@ -68,8 +68,6 @@ internal class ApplicationControllerTest {
             )
         }
 
-        // TODO test for stater-filtering and dateCreated-ordering in DAOTest!
-
         private fun requestApplications(): List<ApplicationDTO> {
             val responseString = mvc.get(ApiPaths.applications) {
             }.andExpect {
