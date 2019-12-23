@@ -31,16 +31,10 @@ internal class AddressValidationClientTest {
 
         val response = client.validateAddress("Long Street", "Leipzig")
 
-        assertThat(response)
-            .isInstanceOfSatisfying(Outcome.Success::class.java) { outcome ->
-                assertThat(outcome.value).isEqualTo(
-                    AddressValidationResponseDTO(
-                        address = "Long Street",
-                        valid = true
-                    )
-                )
-
-            }
+        assertThat(response).isInstanceOfSatisfying(Outcome.Success::class.java) { success ->
+            val expectedDTO = AddressValidationResponseDTO(address = "Long Street", valid = true)
+            assertThat(success.value).isEqualTo(expectedDTO)
+        }
     }
 
 
