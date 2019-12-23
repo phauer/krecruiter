@@ -9,7 +9,7 @@
 - Mock handling
 - Helper methods (executing the action, entity creation with default methods, low-level values like Instants, default args)
 - Clock
-- Generel principles:
+- General principles:
     - parameter for whats necessary
     - leave parameter out that are not necessary
     - don't assert everything again and again

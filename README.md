@@ -86,3 +86,7 @@ Location: /applications/3
 
 
 ```
+
+# Tasks
+
+The tasks can be found [here](tasks.md).

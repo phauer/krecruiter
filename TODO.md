@@ -1,6 +1,7 @@
 # TODOs
 
 - write md file containing all required tests. mark the one that should be tackled with mock-based setup.
+- idea: insert some mistakes in the production code. attendees should find errors by writing tests.
 - more topics:
     - kotlinTest (see notes below)
     - testing coroutines?
