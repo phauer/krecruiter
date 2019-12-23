@@ -83,8 +83,6 @@ internal class ApplicationControllerTest {
     @Nested
     inner class CreateApplication {
 
-        // TODO AddressValidationTest!
-
         @Test
         fun `posting an application creates an application and an applicant entry in the database with the posted values and the current timestamp`() {
             mockClock(1.toInstant())

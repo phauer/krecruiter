@@ -2,7 +2,6 @@
 
 - mock-based unit tests:
     - DAO
-    - Client
 - write md file containing all required tests. mark the one that should be tackled with mock-based setup.
 - more topics:
     - kotlinTest (see notes below)

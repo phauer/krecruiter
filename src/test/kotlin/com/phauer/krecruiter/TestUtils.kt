@@ -8,6 +8,7 @@ import com.phauer.krecruiter.common.ApplicantEntity
 import com.phauer.krecruiter.common.ApplicationEntity
 import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.common.ExceptionControllerAdvice
+import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.QueueDispatcher
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -17,13 +18,11 @@ import java.util.UUID
 
 object TestObjects {
     val mapper: ObjectMapper = SpringConfiguration().objectMapper()
-    val httpClient = SpringConfiguration().httpClient()
+    val httpClient: OkHttpClient = SpringConfiguration().httpClient()
     val applicationDtoListType: CollectionType = mapper.typeFactory.constructCollectionType(List::class.java, ApplicationDTO::class.java)
 }
 
 fun <T> T.toJson(): String = TestObjects.mapper.writeValueAsString(this)
-
-inline fun <reified T> String.toObject(): T = TestObjects.mapper.readValue(this, T::class.java)
 
 fun Int.toInstant(): Instant = Instant.ofEpochSecond(this.toLong())
 

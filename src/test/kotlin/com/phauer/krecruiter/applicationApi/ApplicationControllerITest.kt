@@ -39,7 +39,11 @@ internal class ApplicationControllerITest {
     private val controller = ApplicationController(
         dao = PostgreSQLInstance.jdbi.onDemand(),
         clock = clock,
-        addressValidationClient = AddressValidationClient(TestObjects.httpClient, TestObjects.mapper, validationService.url("").toString())
+        addressValidationClient = AddressValidationClient(
+            client = TestObjects.httpClient,
+            mapper = TestObjects.mapper,
+            baseUrl = validationService.url("").toString()
+        )
     )
     private val mvc = createMockMvc(controller)
     private val testDAO = TestDAO(PostgreSQLInstance.jdbi)
@@ -186,7 +190,7 @@ internal class ApplicationControllerITest {
         }
 
         @Test
-        fun `return server error if the address validation service is not available`() {
+        fun `return server error if the address validation service returns 500`() {
             validationService.enqueue(MockResponse().setResponseCode(500))
             val requestApplication = createApplicantEntity()
 
