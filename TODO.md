@@ -1,12 +1,17 @@
 # TODOs
 
-- use flyway instead of DIY-schema creation
-- ApplicationController test as a mock-based test! at least the GET part.
-- more tests?:
-    - **check out java testing guide: what else can we test that require special assertions.**
-    - POST resource: location header
-    - add a Scheduler - maybe it will email
-    - more complexity required? rename applicant to person and introduce recruiter and hiringManager as parts of the application
+- mock-based unit tests:
+    - Controller
+    - DAO
+    - Client
+- write md file containing all required tests. mark the one that should be tackled with mock-based setup.
+- more topics:
+    - kotlinTest (see notes below)
+    - testing coroutines?
+- pass info to attendees. make github repo public.
+- create slides 
+    - integration test slides: migrate code examples to kotlin
+- sent updated agenda to kkon for website
 - give KotlinTest a second chance? or at least show as an alternative approach.
     - https://github.com/kotlintest/kotlintest
     - https://github.com/kotlintest/kotlintest/blob/master/doc/reference.md
@@ -14,3 +19,9 @@
     - auch parameterized test sehen besser aus.
     - frage ist: wie mächtig sind die matcher?
     - auch nett: soft-assertions und custom matchers
+- use flyway instead of DIY-schema creation
+- more tests?:
+    - check out java testing guide: what else can we test that require special assertions.
+    - POST resource: location header
+    - add a Scheduler - maybe it will email
+    - more complexity required? rename applicant to person and introduce recruiter and hiringManager as parts of the application
