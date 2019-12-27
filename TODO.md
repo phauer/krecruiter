@@ -1,8 +1,14 @@
 # TODOs
 
 - kotlinTest
+    - con: weaker intellij integration (less smooth as with junit 5)
 - testing coroutines?
-- move solutions to different branch. remove them from master branch.
+- create branches:
+    - master (complete solution) 
+    - 1-mock-based-unit-tests
+    - 2-integration-tests
+    - 3-kotlintest
+    - -> document in README
 - idea: insert some mistakes in the production code. attendees should find errors by writing tests.
 - pass info to attendees. make github repo public.
 - create slides 

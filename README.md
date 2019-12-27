@@ -14,6 +14,7 @@ Requirements:
 - Docker-Compose
 - Java 11
 - IntelliJ IDEA
+- IntelliJ IDEA Plugin "KotlinTest"
 - Optional: HTTP Client [httpie](https://httpie.org/) or [Postman](https://www.getpostman.com/) to try the HTTP API 
 
 ```bash
