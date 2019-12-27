@@ -201,7 +201,7 @@ internal class ApplicationControllerITest {
 
         @ParameterizedTest
         @MethodSource("missingFieldDtoProvider")
-        fun `dont create application and return a 400 if an required field is missing`(dtoWithMissingField: MissingFieldApplicationDTO) {
+        fun `dont create an application and return a 400 if an required JSON field is missing`(dtoWithMissingField: MissingFieldApplicationDTO) {
             postApplicationAndExpect400(dtoWithMissingField.toJson())
             assertThat(testDAO.findOneApplication()).isNull()
             assertThat(testDAO.findOneApplicant()).isNull()
@@ -218,7 +218,7 @@ internal class ApplicationControllerITest {
                 """[]"""
             ]
         )
-        fun `dont create application and return a 400 if an invalid json is passed`(invalidJson: String) {
+        fun `dont create an application and return a 400 if an invalid JSON is passed`(invalidJson: String) {
             postApplicationAndExpect400(invalidJson)
             assertThat(testDAO.findOneApplication()).isNull()
             assertThat(testDAO.findOneApplicant()).isNull()
