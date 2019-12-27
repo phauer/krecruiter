@@ -1,14 +1,15 @@
 # TODOs
 
-- write md file containing all required tests. mark the one that should be tackled with mock-based setup.
-- idea: insert some mistakes in the production code. attendees should find errors by writing tests.
 - more topics:
     - kotlinTest (see notes below)
     - testing coroutines?
+- move solutions to different branch. remove them from master branch.
+- idea: insert some mistakes in the production code. attendees should find errors by writing tests.
 - pass info to attendees. make github repo public.
 - create slides 
     - integration test slides: migrate code examples to kotlin
 - sent updated agenda to kkon for website
+- add BootstrapTest
 - give KotlinTest a second chance? or at least show as an alternative approach.
     - https://github.com/kotlintest/kotlintest
     - https://github.com/kotlintest/kotlintest/blob/master/doc/reference.md
