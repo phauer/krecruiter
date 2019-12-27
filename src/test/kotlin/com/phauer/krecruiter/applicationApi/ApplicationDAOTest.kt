@@ -29,7 +29,7 @@ class ApplicationDAOTest {
     }
 
     @Test
-    fun `filter by application state`() {
+    fun `filtering by ApplicationState should only return the applications with the requested state`() {
         insertApplicationWithApplicant(id = 100, state = ApplicationState.REJECTED)
         insertApplicationWithApplicant(id = 200, state = ApplicationState.REJECTED)
         insertApplicationWithApplicant(id = 300, state = ApplicationState.INVITED_TO_INTERVIEW)

@@ -125,7 +125,7 @@ internal class ApplicationControllerTest {
         }
 
         @Test
-        fun `return server error if the address validation service is not available`() {
+        fun `return server error if the request to the address validation service is not successfully`() {
             every { addressValidationClient.validateAddress(any(), any()) } returns Outcome.Error(
                 message = "Request Failed",
                 cause = null

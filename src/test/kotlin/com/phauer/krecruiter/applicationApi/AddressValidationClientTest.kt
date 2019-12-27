@@ -26,7 +26,7 @@ internal class AddressValidationClientTest {
     }
 
     @Test
-    fun `pass data of validation response to caller`() {
+    fun `pass a 200 response to the caller with a success object`() {
         validationService.enqueueValidationResponse(code = 200, valid = true, address = "Long Street")
 
         val response = client.validateAddress("Long Street", "Leipzig")
@@ -39,7 +39,7 @@ internal class AddressValidationClientTest {
 
 
     @Test
-    fun `return error object if request to service`() {
+    fun `return an error object if the validation service returns a 500`() {
         validationService.enqueue(MockResponse().setResponseCode(500))
 
         val response = client.validateAddress("Long Street", "Leipzig")
