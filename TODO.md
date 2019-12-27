@@ -1,8 +1,7 @@
 # TODOs
 
-- more topics:
-    - kotlinTest (see notes below)
-    - testing coroutines?
+- kotlinTest
+- testing coroutines?
 - move solutions to different branch. remove them from master branch.
 - idea: insert some mistakes in the production code. attendees should find errors by writing tests.
 - pass info to attendees. make github repo public.
@@ -10,13 +9,6 @@
     - integration test slides: migrate code examples to kotlin
 - sent updated agenda to kkon for website
 - add BootstrapTest
-- give KotlinTest a second chance? or at least show as an alternative approach.
-    - https://github.com/kotlintest/kotlintest
-    - https://github.com/kotlintest/kotlintest/blob/master/doc/reference.md
-    - esp. property-based testing und table-driven support ist nice.
-    - auch parameterized test sehen besser aus.
-    - frage ist: wie mächtig sind die matcher?
-    - auch nett: soft-assertions und custom matchers
 - use flyway instead of DIY-schema creation
 - more tests?:
     - check out java testing guide: what else can we test that require special assertions.

@@ -26,3 +26,5 @@
 
 ### VS Code ###
 .vscode/
+
+.kotlintest
