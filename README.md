@@ -8,14 +8,13 @@ Example application to train writing tests with Kotlin. The application uses a d
 
 # Setup
 
-Requirements:
+## Requirements
 
 - Docker
 - Docker-Compose
 - Java 11
 - IntelliJ IDEA
 - IntelliJ IDEA Plugin "KotlinTest"
-- Optional: HTTP Client [httpie](https://httpie.org/) or [Postman](https://www.getpostman.com/) to try the HTTP API 
 
 ```bash
 git clone git@github.com:phauer/krecruiter.git
@@ -32,11 +31,10 @@ docker-compose up
 curl localhost:8080/applications
 ```
 
-Optionally, you can download the sources of all libraries up front:
+## Optional
 
-```bash
-./mvnw dependency:sources
-```
+- HTTP Client [httpie](https://httpie.org/) or [Postman](https://www.getpostman.com/) to try the HTTP API 
+- You can download the sources of all libraries up front using `./mvnw dependency:sources`. This eases code navigation in IntelliJ. 
 
 # Inspect the PostgreSQL
 
