@@ -36,3 +36,8 @@
 - Other interesting features of KotlinTest:
     - [Inspectors for testing collections](https://github.com/kotlintest/kotlintest/blob/master/doc/reference.md#inspectors)
     - [Custom Matcher](https://github.com/kotlintest/kotlintest/blob/master/doc/reference.md#custom-matchers)
+    
+## Optional Tasks
+
+- Test that a correct `location` header is returned in the response for creating an application. It should look like `/applications/<applicationId>`.
+- Rewrite the tests using other [testing styles](https://github.com/kotlintest/kotlintest/blob/master/doc/styles.md) provided by KotlinTest.
