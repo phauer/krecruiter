@@ -1,7 +1,9 @@
 # TODOs
 
-- kotlinTest
-    - con: weaker intellij integration (less smooth as with junit 5)
+- KotlinTest
+    - create some slides (esp for pro and cons)
+    - google "unclear" notes
+- highlight "KotlinTest, Table-Driven Testing, Property-Based Testing" in slides.
 - testing coroutines?
 - create branches:
     - master (complete solution) 
@@ -14,6 +16,7 @@
 - create slides 
     - integration test slides: migrate code examples to kotlin
 - sent updated agenda to kkon for website
+    - KotlinTest, Table-Driven Testing, Property-Based Testing
 - add BootstrapTest
 - use flyway instead of DIY-schema creation
 - more tests?:
