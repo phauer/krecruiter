@@ -83,14 +83,12 @@ class ApplicationControllerKotlinTest : FreeSpec() {
 
                 val actualResponseDTO = requestApplications()
 
-                actualResponseDTO.shouldContain(
-                    ApplicationDTO(
-                        id = 100,
-                        fullName = "John Doe",
-                        jobTitle = "Software Developer",
-                        state = ApplicationState.RECEIVED,
-                        dateCreated = 100.toInstant()
-                    )
+                actualResponseDTO shouldContain ApplicationDTO(
+                    id = 100,
+                    fullName = "John Doe",
+                    jobTitle = "Software Developer",
+                    state = ApplicationState.RECEIVED,
+                    dateCreated = 100.toInstant()
                 )
             }
 
