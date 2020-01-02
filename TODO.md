@@ -1,9 +1,8 @@
 # TODOs
 
 - KotlinTest
-    - create some slides (esp for pro and cons)
     - google "unclear" notes
-- highlight "KotlinTest, Table-Driven Testing, Property-Based Testing" in slides.
+    - create some slides (esp for pro and cons)
 - testing coroutines?
 - create branches:
     - master (complete solution) 

@@ -32,6 +32,12 @@ docker-compose up
 curl localhost:8080/applications
 ```
 
+Optionally, you can download the sources of all libraries up front:
+
+```bash
+./mvnw dependency:sources
+```
+
 # Inspect the PostgreSQL
 
 You can use your favorite SQL Client or the [adminer](https://www.adminer.org/) - a simple Web UI that is already started with docker-compose. Open [http://localhost:900/?pgsql=db&username=user&db=krecruiter&ns=public](http://localhost:900/?pgsql=db&username=user&db=krecruiter&ns=public) in the browser. Use `password` for the password. You can also look up the database configuration in the `docker-compose.yml`.
