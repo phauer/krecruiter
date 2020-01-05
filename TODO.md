@@ -10,6 +10,7 @@
     - 2-integration-tests
     - 3-kotlintest
     - -> document in README
+- Feedback Slide + Feedback QR Code 
 - idea: insert some mistakes in the production code. attendees should find errors by writing tests.
 - pass info to attendees. make github repo public.
 - create slides 

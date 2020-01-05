@@ -13,7 +13,7 @@ import com.phauer.krecruiter.toInstant
 import com.phauer.krecruiter.toJson
 import io.kotlintest.Spec
 import io.kotlintest.TestCase
-import io.kotlintest.data.forall
+import io.kotlintest.data.suspend.forall
 import io.kotlintest.matchers.collections.shouldContain
 import io.kotlintest.matchers.collections.shouldContainAll
 import io.kotlintest.matchers.collections.shouldContainInOrder
@@ -156,9 +156,12 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                 }
             }
 
+            // currently, we can't put the test definition inside the assertAll-lambda (like we can do for table-driven tests)
+            // see https://github.com/kotlintest/kotlintest/issues/717
+            // we have to wait for KotlinTest 4.0
             "Create an application with randomized data" {
                 assertAll(50, ApplicationCreationDTOGenerator()) { requestedApplication: ApplicationCreationDTO ->
-                    beforeTest(mockk<TestCase>()) // beforeTest() cleanup is not executed automatically
+                    beforeTest(mockk<TestCase>()) // beforeTest() cleanup is not executed automatically. -> KotlinTest 4.0
                     mockClock(1.toInstant())
                     validationService.enqueueValidationResponse(code = 200, valid = true)
 
@@ -200,22 +203,24 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                 response.status shouldBe 500
             }
 
-            "dont create an application and return a 400 if an required JSON field is missing" {
-                forall(
+            "dont create an application and return a 400 if an required JSON field is missing." - {
+                forall( // there are two forall methods. import the one in the suspend package
                     row(MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = "street", city = "city", jobTitle = null)),
                     row(MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = "street", city = null, jobTitle = "title")),
                     row(MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = null, city = "city", jobTitle = "title")),
                     row(MissingFieldApplicationDTO(firstName = "name1", lastName = null, street = "street", city = "city", jobTitle = "title")),
                     row(MissingFieldApplicationDTO(firstName = null, lastName = "name2", street = "street", city = "city", jobTitle = "title"))
                 ) { dtoWithMissingField: MissingFieldApplicationDTO ->
-                    postApplicationAndExpect400(dtoWithMissingField.toJson())
-                    testDAO.findOneApplication().shouldBeNull()
-                    testDAO.findOneApplicant().shouldBeNull()
+                    "DTO with missing field: $dtoWithMissingField" {
+                        postApplicationAndExpect400(dtoWithMissingField.toJson())
+                        testDAO.findOneApplication().shouldBeNull()
+                        testDAO.findOneApplicant().shouldBeNull()
+                    }
                 }
             }
 
-            "dont create an application and return a 400 if an invalid JSON is passed" {
-                forall(
+            "dont create an application and return a 400 if an invalid JSON is passed" - {
+                forall( // there are two forall methods. import the one in the suspend package
                     row(""""""),
                     row("""asdfasfd"""),
                     row("""2"""),
@@ -223,9 +228,11 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                     row("""{"1":"a"}"""),
                     row("""[]""")
                 ) { invalidJson: String ->
-                    postApplicationAndExpect400(invalidJson)
-                    testDAO.findOneApplication().shouldBeNull()
-                    testDAO.findOneApplicant().shouldBeNull()
+                    "invalid json: $invalidJson" {
+                        postApplicationAndExpect400(invalidJson)
+                        testDAO.findOneApplication().shouldBeNull()
+                        testDAO.findOneApplicant().shouldBeNull()
+                    }
                 }
             }
         }
