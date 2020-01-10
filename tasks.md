@@ -17,13 +17,13 @@
         - Reject application creation when the AddressValidationService says that the submitted address is invalid.
         - Return a 500 status code if the request to the AddressValidationService was not successfully
 
-
     
 ## Hands-On Part 2: Integration Tests
 
 - Migrate all tests from part 1 to the integration test `ApplicationControllerITest`. For this, wire the real objects together (not mocks) and test all layers at once (Controller, DAO, Client). Only migrate those tests that describe behavior of the service that is visible outside of it (ingoing requests, changed databases entries, outgoing responses). Internals (like internal data structures, exceptions, outcome objects) are implementation details and not relevant. Only the resulting behavior of those internals are relevant.
 - Don't create an application and return a 400 if an required JSON field is missing. Test this with all fields (because all fields are required).
 - Don't create an application and return a 400 if an invalid JSON is passed. Try at least the strings "", "asdf", "2", "{}", "[]".
+
 
 ## Hands-On Part 3: KotlinTest, Table-Driven Testing, Property-Based Testing
 
@@ -41,5 +41,8 @@
     
 ## Optional Tasks
 
+- Make your test code even cleaner, expressive and understandable.
+    - Read briefly through [Modern Best Practices for Testing in Java](https://phauer.com/2019/modern-best-practices-testing-java/). Although the examples are written in Java, the described best practices also apply to Kotlin test code. 
+    - Are there any recommendations that can improve your test code? Try to refactor your code.
 - Test that a correct `location` header is returned in the response for creating an application. It should look like `/applications/<applicationId>`.
 - Rewrite the tests using other [testing styles](https://github.com/kotlintest/kotlintest/blob/master/doc/styles.md) provided by KotlinTest.

@@ -5,7 +5,6 @@
 - hands-on teil für mock-based tests:
      - Tipp bei AddressValidationClientTest: MockWebServer snippets zeigen!
 - ApplicationDAO auf class umschreiben, damit jdbi als dep offensichtlich wird. und man nicht mehr das StringTemplate nehmen muss. 
-- testing coroutines?
 - create branches:
     - master (complete solution) 
     - 1-mock-based-unit-tests
@@ -24,3 +23,4 @@
     - check out java testing guide: what else can we test that require special assertions.
     - add a Scheduler - maybe it will email
     - more complexity required? rename applicant to person and introduce recruiter and hiringManager as parts of the application
+- testing coroutines?
