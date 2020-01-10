@@ -1,8 +1,10 @@
 # TODOs
 
 - KotlinTest
-    - google "unclear" notes
-    - create some slides (esp for pro and cons)
+    - create introduction slides (esp for pro and cons)
+- hands-on teil für mock-based tests:
+     - Tipp bei AddressValidationClientTest: MockWebServer snippets zeigen!
+- ApplicationDAO auf class umschreiben, damit jdbi als dep offensichtlich wird. und man nicht mehr das StringTemplate nehmen muss. 
 - testing coroutines?
 - create branches:
     - master (complete solution) 
@@ -10,13 +12,12 @@
     - 2-integration-tests
     - 3-kotlintest
     - -> document in README
+- use term "component test" instead of "integration test"? at least name it once in the slides.
 - Feedback Slide + Feedback QR Code 
 - idea: insert some mistakes in the production code. attendees should find errors by writing tests.
 - pass info to attendees. make github repo public.
 - create slides 
     - integration test slides: migrate code examples to kotlin
-- sent updated agenda to kkon for website
-    - KotlinTest, Table-Driven Testing, Property-Based Testing
 - add BootstrapTest
 - use flyway instead of DIY-schema creation
 - more tests?:

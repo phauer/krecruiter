@@ -8,6 +8,7 @@ import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.createApplicantEntity
 import com.phauer.krecruiter.createApplicationEntity
 import com.phauer.krecruiter.createMockMvc
+import com.phauer.krecruiter.requestApplications
 import com.phauer.krecruiter.reset
 import com.phauer.krecruiter.toInstant
 import com.phauer.krecruiter.toJson
@@ -33,7 +34,6 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import java.time.Clock
 import java.time.Instant
@@ -81,7 +81,7 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                     )
                 )
 
-                val actualResponseDTO = requestApplications()
+                val actualResponseDTO = mvc.requestApplications()
 
                 actualResponseDTO shouldContain ApplicationDTO(
                     id = 100,
@@ -99,7 +99,7 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                 insertApplicationWithApplicant(id = 400, state = ApplicationState.EMPLOYED)
                 insertApplicationWithApplicant(id = 500, state = ApplicationState.RECEIVED)
 
-                val actualResponseDTO = requestApplications(state = ApplicationState.REJECTED)
+                val actualResponseDTO = mvc.requestApplications(state = ApplicationState.REJECTED)
 
                 actualResponseDTO.map(ApplicationDTO::id)
                     .shouldContainAll(100, 200)
@@ -109,7 +109,7 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                 insertApplicationWithApplicant(id = 100, state = ApplicationState.REJECTED)
                 insertApplicationWithApplicant(id = 200, state = ApplicationState.INVITED_TO_INTERVIEW)
 
-                val actualResponseDTO = requestApplications(state = null)
+                val actualResponseDTO = mvc.requestApplications(state = null)
 
                 actualResponseDTO.map(ApplicationDTO::id)
                     .shouldContainAll(100, 200)
@@ -120,7 +120,7 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                 insertApplicationWithApplicant(id = 200, dateCreated = 200.toInstant())
                 insertApplicationWithApplicant(id = 300, dateCreated = 3.toInstant())
 
-                val actualResponseDTO = requestApplications()
+                val actualResponseDTO = mvc.requestApplications()
 
                 actualResponseDTO.map(ApplicationDTO::id)
                     .shouldContainInOrder(300, 100, 200)
@@ -270,21 +270,6 @@ class ApplicationControllerKotlinTest : FreeSpec() {
         testDAO.insert(createApplicantEntity(id = id, firstName = "John", lastName = "Doe"))
         testDAO.insert(createApplicationEntity(id = id, applicantId = id, state = state, dateCreated = dateCreated))
     }
-
-    private fun requestApplications(
-        state: ApplicationState? = null
-    ): List<ApplicationDTO> {
-        val responseString = mvc.get(ApiPaths.applications) {
-            if (state != null) {
-                param("state", state.toString())
-            }
-        }.andExpect {
-            status { isOk }
-            content { contentType(MediaType.APPLICATION_JSON) }
-        }.andReturn().response.contentAsString
-        return TestObjects.mapper.readValue(responseString, TestObjects.applicationDtoListType)
-    }
-
 }
 
 private fun MockWebServer.enqueueValidationResponse(code: Int, valid: Boolean) {

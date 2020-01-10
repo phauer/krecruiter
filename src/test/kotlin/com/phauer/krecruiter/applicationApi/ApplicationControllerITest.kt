@@ -8,6 +8,7 @@ import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.createApplicantEntity
 import com.phauer.krecruiter.createApplicationEntity
 import com.phauer.krecruiter.createMockMvc
+import com.phauer.krecruiter.requestApplications
 import com.phauer.krecruiter.reset
 import com.phauer.krecruiter.toInstant
 import com.phauer.krecruiter.toJson
@@ -26,7 +27,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import java.time.Clock
 import java.time.Instant
@@ -78,7 +78,7 @@ internal class ApplicationControllerITest {
                 )
             )
 
-            val actualResponseDTO = requestApplications()
+            val actualResponseDTO = mvc.requestApplications()
 
             assertThat(actualResponseDTO).containsExactly(
                 ApplicationDTO(
@@ -99,7 +99,7 @@ internal class ApplicationControllerITest {
             insertApplicationWithApplicant(id = 400, state = ApplicationState.EMPLOYED)
             insertApplicationWithApplicant(id = 500, state = ApplicationState.RECEIVED)
 
-            val actualResponseDTO = requestApplications(state = ApplicationState.REJECTED)
+            val actualResponseDTO = mvc.requestApplications(state = ApplicationState.REJECTED)
 
             assertThat(actualResponseDTO)
                 .extracting<Int>(ApplicationDTO::id)
@@ -111,7 +111,7 @@ internal class ApplicationControllerITest {
             insertApplicationWithApplicant(id = 100, state = ApplicationState.REJECTED)
             insertApplicationWithApplicant(id = 200, state = ApplicationState.INVITED_TO_INTERVIEW)
 
-            val actualResponseDTO = requestApplications(state = null)
+            val actualResponseDTO = mvc.requestApplications(state = null)
 
             assertThat(actualResponseDTO)
                 .extracting<Int>(ApplicationDTO::id)
@@ -125,25 +125,11 @@ internal class ApplicationControllerITest {
             insertApplicationWithApplicant(id = 200, dateCreated = 200.toInstant())
             insertApplicationWithApplicant(id = 300, dateCreated = 3.toInstant())
 
-            val actualResponseDTO = requestApplications()
+            val actualResponseDTO = mvc.requestApplications()
 
             assertThat(actualResponseDTO)
                 .extracting<Int>(ApplicationDTO::id)
                 .containsExactly(300, 100, 200)
-        }
-
-        private fun requestApplications(
-            state: ApplicationState? = null
-        ): List<ApplicationDTO> {
-            val responseString = mvc.get(ApiPaths.applications) {
-                if (state != null) {
-                    param("state", state.toString())
-                }
-            }.andExpect {
-                status { isOk }
-                content { contentType(MediaType.APPLICATION_JSON) }
-            }.andReturn().response.contentAsString
-            return TestObjects.mapper.readValue(responseString, TestObjects.applicationDtoListType)
         }
     }
 

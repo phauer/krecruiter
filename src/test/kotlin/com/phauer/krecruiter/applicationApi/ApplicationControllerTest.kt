@@ -1,11 +1,11 @@
 package com.phauer.krecruiter.applicationApi
 
-import com.phauer.krecruiter.TestObjects
 import com.phauer.krecruiter.common.ApiPaths
 import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.common.Outcome
 import com.phauer.krecruiter.createApplicantEntity
 import com.phauer.krecruiter.createMockMvc
+import com.phauer.krecruiter.requestApplications
 import com.phauer.krecruiter.toInstant
 import com.phauer.krecruiter.toJson
 import io.mockk.clearAllMocks
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import java.time.Clock
 import java.time.Instant
@@ -55,7 +54,7 @@ internal class ApplicationControllerTest {
                 )
             )
 
-            val actualResponseDTO = requestApplications()
+            val actualResponseDTO = mvc.requestApplications()
 
             assertThat(actualResponseDTO).containsExactly(
                 ApplicationDTO(
@@ -66,15 +65,6 @@ internal class ApplicationControllerTest {
                     dateCreated = 100.toInstant()
                 )
             )
-        }
-
-        private fun requestApplications(): List<ApplicationDTO> {
-            val responseString = mvc.get(ApiPaths.applications) {
-            }.andExpect {
-                status { isOk }
-                content { contentType(MediaType.APPLICATION_JSON) }
-            }.andReturn().response.contentAsString
-            return TestObjects.mapper.readValue(responseString, TestObjects.applicationDtoListType)
         }
     }
 
