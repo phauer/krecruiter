@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "==1.0.2"
-faker = "==1.0.2"
+flask = "==1.1.1"
+faker = "==4.0.0"
 
 [dev-packages]
 pylint = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"

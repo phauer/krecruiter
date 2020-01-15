@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
 import json
-
 import sys
+
 from faker import Faker
 from flask import Flask, Response, request
 
