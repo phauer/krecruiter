@@ -8,7 +8,7 @@ Example application to improve your testing skills with Kotlin.
 
 - [Docker](https://docs.docker.com/install/)
 - [Docker-Compose](https://docs.docker.com/compose/install/)
-- Java 11 (e.g. via [SDKMan](https://sdkman.io/)
+- Java 11 (e.g. via [SDKMan](https://sdkman.io/))
 - IntelliJ IDEA
 - IntelliJ IDEA Plugin "KotlinTest"
 
