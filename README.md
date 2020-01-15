@@ -1,33 +1,40 @@
 # KRecruiter
 
-Example application to train writing tests with Kotlin. The application uses a database and calls a remote service in order to be as close to the testing reality as possible.  
-
-# Big Picture
-
-![KRecruiter Big Picture](docs/krecruiter-big-picture.png)
+Example application to improve your testing skills with Kotlin. 
 
 # Setup
 
 ## Requirements
 
-- Docker
-- Docker-Compose
-- Java 11
+- [Docker](https://docs.docker.com/install/)
+- [Docker-Compose](https://docs.docker.com/compose/install/)
+- Java 11 (e.g. via [SDKMan](https://sdkman.io/)
 - IntelliJ IDEA
 - IntelliJ IDEA Plugin "KotlinTest"
+
+## Checkout, Build, Run
+
+Checkout:
 
 ```bash
 git clone git@github.com:phauer/krecruiter.git
 cd krecruiter
+```
 
-# start a PostgreSQL, adminer, and a stub for the address-validation-service
+Start a PostgreSQL, adminer, and the stub for the address-validation-service:
+
+```bash
 docker-compose up
+```
 
-# a) start the RecrutingAppApplication.kt via IntelliJ (recommended)
-# or b) run
-./mvnw spring-boot:run
+In order to run the application you have two options:
 
-# test with
+- Open Project in IntelliJ (`File` > `Open...`) and start the `KRecruiterApplication.kt` via right click > "Run KRecruiterApplication.kt..."
+- Run `./mvnw spring-boot:run` (Mac, Linux) or `./mvnw.cmd spring-boot:run` (Windows)
+
+Test the application by opening [http://localhost:8080/applications](http://localhost:8080/applications) in your browser or by calling:
+
+```bash
 curl localhost:8080/applications
 ```
 
@@ -36,9 +43,15 @@ curl localhost:8080/applications
 - HTTP Client [httpie](https://httpie.org/) or [Postman](https://www.getpostman.com/) to try the HTTP API 
 - You can download the sources of all libraries up front using `./mvnw dependency:sources`. This eases code navigation in IntelliJ. 
 
-# Inspect the PostgreSQL
+## Inspect the PostgreSQL
 
-You can use your favorite SQL Client or the [adminer](https://www.adminer.org/) - a simple Web UI that is already started with docker-compose. Open [http://localhost:900/?pgsql=db&username=user&db=krecruiter&ns=public](http://localhost:900/?pgsql=db&username=user&db=krecruiter&ns=public) in the browser. Use `password` for the password. You can also look up the database configuration in the `docker-compose.yml`.
+You can use your favorite SQL Client or the [adminer](https://www.adminer.org/) - a simple Web UI that is already started via docker-compose. Open [http://localhost:900/?pgsql=db&username=user&db=krecruiter&ns=public](http://localhost:900/?pgsql=db&username=user&db=krecruiter&ns=public) in the browser. Use `password` for the password. You can also look up the database configuration in the `docker-compose.yml`.
+
+# Big Picture
+
+The application uses a database and calls a remote service in order to be as close to the testing reality as possible.  
+
+![KRecruiter Big Picture](docs/krecruiter-big-picture.png)
 
 # Trying the API
 
