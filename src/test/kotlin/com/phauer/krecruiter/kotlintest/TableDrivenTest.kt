@@ -5,9 +5,22 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
 import io.kotlintest.tables.row
 
-class TokenTest : FreeSpec() {
+class TableDrivenTest : FreeSpec() {
     init {
         "parse valid tokens" - {
+            forall(
+                row("1511443755_2", Token(1511443755, "2")),
+                row("151175_13521", Token(151175, "13521")),
+                row("151144375_id", Token(151144375, "id")),
+                row("1511443759_1", Token(1511443759, "1")),
+                row(null, null)
+            ) { input: String?, expected: Token? ->
+                "Input String: $input. Expected Token: $expected" {
+                    parse(input).shouldBe(expected)
+                }
+            }
+        }
+        "parse valid tokens (data class)" - {
             forall(
                 row(TestData(input = "1511443755_2", expected = Token(1511443755, "2"))),
                 row(TestData(input = "151175_13521", expected = Token(151175, "13521"))),
