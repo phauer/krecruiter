@@ -99,20 +99,18 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                 insertApplicationWithApplicant(id = 400, state = ApplicationState.EMPLOYED)
                 insertApplicationWithApplicant(id = 500, state = ApplicationState.RECEIVED)
 
-                val actualResponseDTO = mvc.requestApplications(state = ApplicationState.REJECTED)
-
-                actualResponseDTO.map(ApplicationDTO::id)
-                    .shouldContainAll(100, 200)
+                mvc.requestApplications(state = ApplicationState.REJECTED).asClue {
+                    it.map(ApplicationDTO::id).shouldContainAll(100, 200)
+                }
             }
 
             "return all when application state is not set" {
                 insertApplicationWithApplicant(id = 100, state = ApplicationState.REJECTED)
                 insertApplicationWithApplicant(id = 200, state = ApplicationState.INVITED_TO_INTERVIEW)
 
-                val actualResponseDTO = mvc.requestApplications(state = null)
-
-                actualResponseDTO.map(ApplicationDTO::id)
-                    .shouldContainAll(100, 200)
+                mvc.requestApplications(state = null).asClue {
+                    it.map(ApplicationDTO::id).shouldContainAll(100, 200)
+                }
             }
 
             "order by dateCreated" {
@@ -120,10 +118,9 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                 insertApplicationWithApplicant(id = 200, dateCreated = 200.toInstant())
                 insertApplicationWithApplicant(id = 300, dateCreated = 3.toInstant())
 
-                val actualResponseDTO = mvc.requestApplications()
-
-                actualResponseDTO.map(ApplicationDTO::id)
-                    .shouldContainInOrder(300, 100, 200)
+                mvc.requestApplications().asClue {
+                    it.map(ApplicationDTO::id).shouldContainInOrder(300, 100, 200)
+                }
             }
         }
         "Create Application" - {
