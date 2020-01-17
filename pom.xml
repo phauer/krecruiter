@@ -135,6 +135,13 @@
             <version>3.4.2</version>
             <scope>test</scope>
         </dependency>
+        <!-- Or use KotlinTest's matchers only -->
+        <!--        <dependency>-->
+        <!--            <groupId>io.kotlintest</groupId>-->
+        <!--            <artifactId>kotlintest-assertions</artifactId>-->
+        <!--            <version>3.4.2</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
     </dependencies>
 
     <build>
