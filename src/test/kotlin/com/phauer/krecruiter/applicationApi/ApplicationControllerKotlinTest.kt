@@ -15,6 +15,7 @@ import com.phauer.krecruiter.toJson
 import io.kotlintest.Spec
 import io.kotlintest.TestCase
 import io.kotlintest.data.suspend.forall
+import io.kotlintest.matchers.asClue
 import io.kotlintest.matchers.collections.shouldContain
 import io.kotlintest.matchers.collections.shouldContainAll
 import io.kotlintest.matchers.collections.shouldContainInOrder
@@ -23,7 +24,6 @@ import io.kotlintest.matchers.types.shouldBeNull
 import io.kotlintest.matchers.types.shouldNotBeNull
 import io.kotlintest.properties.Gen
 import io.kotlintest.properties.assertAll
-import io.kotlintest.should
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
 import io.kotlintest.tables.row
@@ -140,13 +140,13 @@ class ApplicationControllerKotlinTest : FreeSpec() {
 
                 postApplicationAndExpect201(requestApplication)
 
-                testDAO.findOneApplication() should {
+                testDAO.findOneApplication().asClue {
                     it.shouldNotBeNull()
                     it.jobTitle shouldBe "Software Engineer"
                     it.state shouldBe ApplicationState.RECEIVED
                     it.dateCreated shouldBe 1.toInstant()
                 }
-                testDAO.findOneApplicant() should {
+                testDAO.findOneApplicant().asClue {
                     it.shouldNotBeNull()
                     it.firstName shouldBe "Anna"
                     it.lastName shouldBe "Schmidt"
@@ -167,13 +167,13 @@ class ApplicationControllerKotlinTest : FreeSpec() {
 
                     postApplicationAndExpect201(requestedApplication)
 
-                    testDAO.findOneApplication() should {
+                    testDAO.findOneApplication().asClue {
                         it.shouldNotBeNull()
                         it.jobTitle shouldBe requestedApplication.jobTitle
                         it.state shouldBe ApplicationState.RECEIVED
                         it.dateCreated shouldBe 1.toInstant()
                     }
-                    testDAO.findOneApplicant() should {
+                    testDAO.findOneApplicant().asClue {
                         it.shouldNotBeNull()
                         it.firstName shouldBe requestedApplication.firstName
                         it.lastName shouldBe requestedApplication.lastName
