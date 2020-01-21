@@ -18,7 +18,6 @@ import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
-import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -37,7 +36,7 @@ internal class ApplicationControllerITest {
     private val clock = mockk<Clock>()
     private val validationService = MockWebServer().apply { start() }
     private val controller = ApplicationController(
-        dao = PostgreSQLInstance.jdbi.onDemand(),
+        dao = ApplicationDAO(PostgreSQLInstance.jdbi),
         clock = clock,
         addressValidationClient = AddressValidationClient(
             client = TestObjects.httpClient,

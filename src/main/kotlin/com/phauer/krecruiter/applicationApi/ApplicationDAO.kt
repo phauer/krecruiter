@@ -1,42 +1,74 @@
 package com.phauer.krecruiter.applicationApi
 
 import com.phauer.krecruiter.common.ApplicationState
-import org.jdbi.v3.sqlobject.SqlObject
-import org.jdbi.v3.sqlobject.customizer.Define
-import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys
-import org.jdbi.v3.sqlobject.statement.SqlQuery
-import org.jdbi.v3.sqlobject.statement.SqlUpdate
-import org.jdbi.v3.stringtemplate4.UseStringTemplateEngine
+import org.jdbi.v3.core.Jdbi
+import org.jdbi.v3.core.kotlin.mapTo
+import org.jdbi.v3.core.kotlin.withHandleUnchecked
+import org.springframework.stereotype.Component
 import java.time.Instant
 
-interface ApplicationDAO : SqlObject {
+@Component
+class ApplicationDAO(
+    val jdbi: Jdbi
+) {
+    fun findAllApplications(state: ApplicationState?): List<ApplicationWithApplicantsEntity> {
+        return jdbi.withHandleUnchecked<List<ApplicationWithApplicantsEntity>> {
+            val sql = buildString {
+                append(
+                    """
+                    SELECT a.id, p.firstName, p.lastName, a.jobTitle, a.state, a.dateCreated 
+                    FROM application as a LEFT JOIN applicant as p
+                    ON a.applicantId = p.id
+                """
+                )
+                if (state != null) {
+                    append("WHERE a.state = :state ")
+                }
+                append("ORDER by a.dateCreated")
+            }
+            it.createQuery(sql)
+                .apply {
+                    if (state != null) {
+                        bind("state", state)
+                    }
+                }
+                .mapTo<ApplicationWithApplicantsEntity>()
+                .list()
+        }
+    }
 
-    @SqlQuery(
-        """
-        SELECT a.id, p.firstName, p.lastName, a.jobTitle, a.state, a.dateCreated 
-        FROM application as a LEFT JOIN applicant as p
-        ON a.applicantId = p.id 
-        WHERE 1 = 1
-        <if(state)> AND a.state = '<state>' <endif>
-        ORDER by a.dateCreated
-    """
-    )
-    @UseStringTemplateEngine
-    fun findAllApplications(@Define state: ApplicationState?): List<ApplicationWithApplicantsEntity>
-
-    @SqlUpdate(
-        """INSERT INTO applicant(firstName, lastName, street, city, dateCreated)
+    fun createApplicant(firstName: String, lastName: String, street: String, city: String, dateCreated: Instant): Int {
+        return jdbi.withHandleUnchecked {
+            it.createUpdate(
+                """INSERT INTO applicant(firstName, lastName, street, city, dateCreated)
         VALUES (:firstName, :lastName, :street, :city, :dateCreated)"""
-    )
-    @GetGeneratedKeys
-    fun createApplicant(firstName: String, lastName: String, street: String, city: String, dateCreated: Instant): Int
+            )
+                .bind("firstName", firstName)
+                .bind("lastName", lastName)
+                .bind("street", street)
+                .bind("city", city)
+                .bind("dateCreated", dateCreated)
+                .executeAndReturnGeneratedKeys()
+                .mapTo<Int>()
+                .one()
+        }
+    }
 
-    @SqlUpdate(
-        """INSERT INTO application(applicantId, jobTitle, state, dateCreated)
+    fun createApplication(jobTitle: String, applicantId: Int, state: ApplicationState, dateCreated: Instant): Int {
+        return jdbi.withHandleUnchecked {
+            it.createUpdate(
+                """INSERT INTO application(applicantId, jobTitle, state, dateCreated)
         VALUES (:applicantId, :jobTitle, :state, :dateCreated)"""
-    )
-    @GetGeneratedKeys
-    fun createApplication(jobTitle: String, applicantId: Int, state: ApplicationState, dateCreated: Instant): Int
+            )
+                .bind("applicantId", applicantId)
+                .bind("jobTitle", jobTitle)
+                .bind("state", state)
+                .bind("dateCreated", dateCreated)
+                .executeAndReturnGeneratedKeys()
+                .mapTo<Int>()
+                .one()
+        }
+    }
 }
 
 data class ApplicationWithApplicantsEntity(

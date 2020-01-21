@@ -7,7 +7,6 @@ import com.phauer.krecruiter.createApplicantEntity
 import com.phauer.krecruiter.createApplicationEntity
 import com.phauer.krecruiter.toInstant
 import org.assertj.core.api.Assertions.assertThat
-import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -15,7 +14,7 @@ import java.time.Instant
 
 class ApplicationDAOTest {
 
-    private val dao: ApplicationDAO = PostgreSQLInstance.jdbi.onDemand()
+    private val dao: ApplicationDAO = ApplicationDAO(PostgreSQLInstance.jdbi)
     private val testDAO = TestDAO(PostgreSQLInstance.jdbi)
 
     @BeforeAll

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import com.phauer.krecruiter.applicationApi.ApplicationDAO
 import com.phauer.krecruiter.initializer.ApplicantInitializerDAO
 import com.phauer.krecruiter.initializer.ApplicationInitializerDAO
 import okhttp3.Dispatcher
@@ -63,10 +62,6 @@ class SpringConfiguration{
 
     @Bean
     fun applicantInitializerDAO(jdbi: Jdbi): ApplicantInitializerDAO = jdbi.onDemand(ApplicantInitializerDAO::class.java)
-
-    @Bean
-    fun applicationDao(jdbi: Jdbi): ApplicationDAO = jdbi.onDemand(ApplicationDAO::class.java)
-
 }
 
 object UserAgentInterceptor : Interceptor {

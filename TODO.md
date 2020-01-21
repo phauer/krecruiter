@@ -2,7 +2,6 @@
 
 - hands-on teil für mock-based tests:
      - Tipp bei AddressValidationClientTest: MockWebServer snippets zeigen!
-- ApplicationDAO auf class umschreiben, damit jdbi als dep offensichtlich wird. und man nicht mehr das StringTemplate nehmen muss. 
 - create branches:
     - master (complete solution) 
     - 1-mock-based-unit-tests

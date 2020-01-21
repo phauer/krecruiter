@@ -32,7 +32,6 @@ import io.mockk.every
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
 import java.time.Clock
@@ -43,7 +42,7 @@ class ApplicationControllerKotlinTest : FreeSpec() {
     private val clock = mockk<Clock>()
     private val validationService = MockWebServer().apply { start() }
     private val controller = ApplicationController(
-        dao = PostgreSQLInstance.jdbi.onDemand(),
+        dao = ApplicationDAO(PostgreSQLInstance.jdbi),
         clock = clock,
         addressValidationClient = AddressValidationClient(
             client = TestObjects.httpClient,
