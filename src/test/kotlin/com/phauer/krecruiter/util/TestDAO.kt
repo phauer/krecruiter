@@ -1,4 +1,4 @@
-package com.phauer.krecruiter
+package com.phauer.krecruiter.util
 
 import com.phauer.krecruiter.common.ApplicantEntity
 import com.phauer.krecruiter.common.ApplicationEntity

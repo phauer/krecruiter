@@ -1,23 +1,23 @@
 package com.phauer.krecruiter.applicationApi
 
-import com.phauer.krecruiter.TestObjects
 import com.phauer.krecruiter.common.Outcome
-import com.phauer.krecruiter.reset
-import com.phauer.krecruiter.toJson
+import com.phauer.krecruiter.util.TestObjects
+import com.phauer.krecruiter.util.createStartedMockServer
+import com.phauer.krecruiter.util.enqueueValidationResponse
+import com.phauer.krecruiter.util.getUrl
+import com.phauer.krecruiter.util.reset
 import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.http.MediaType
 
 internal class AddressValidationClientTest {
 
-    private val validationService = MockWebServer().apply { start() }
+    private val validationService = createStartedMockServer()
     private val client = AddressValidationClient(
         client = TestObjects.httpClient,
         mapper = TestObjects.mapper,
-        baseUrl = validationService.url("").toString()
+        baseUrl = validationService.getUrl()
     )
 
     @BeforeEach
@@ -48,10 +48,4 @@ internal class AddressValidationClientTest {
     }
 }
 
-private fun MockWebServer.enqueueValidationResponse(code: Int, valid: Boolean, address: String) {
-    val response = MockResponse()
-        .addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-        .setBody(AddressValidationResponseDTO(valid = valid, address = address).toJson())
-        .setResponseCode(code)
-    enqueue(response)
-}
+

@@ -1,11 +1,11 @@
 package com.phauer.krecruiter.applicationApi
 
-import com.phauer.krecruiter.PostgreSQLInstance
-import com.phauer.krecruiter.TestDAO
 import com.phauer.krecruiter.common.ApplicationState
-import com.phauer.krecruiter.createApplicantEntity
-import com.phauer.krecruiter.createApplicationEntity
-import com.phauer.krecruiter.toInstant
+import com.phauer.krecruiter.util.PostgreSQLInstance
+import com.phauer.krecruiter.util.TestDAO
+import com.phauer.krecruiter.util.createApplicantEntity
+import com.phauer.krecruiter.util.createApplicationEntity
+import com.phauer.krecruiter.util.toInstant
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach

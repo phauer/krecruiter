@@ -1,7 +1,5 @@
 # TODOs
 
-- hands-on teil für mock-based tests:
-     - Tipp bei AddressValidationClientTest: MockWebServer snippets zeigen!
 - create branches:
     - master (complete solution) 
     - 1-mock-based-unit-tests

@@ -3,11 +3,11 @@ package com.phauer.krecruiter.applicationApi
 import com.phauer.krecruiter.common.ApiPaths
 import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.common.Outcome
-import com.phauer.krecruiter.createApplicantEntity
-import com.phauer.krecruiter.createMockMvc
-import com.phauer.krecruiter.requestApplications
-import com.phauer.krecruiter.toInstant
-import com.phauer.krecruiter.toJson
+import com.phauer.krecruiter.util.createApplicantEntity
+import com.phauer.krecruiter.util.createMockMvc
+import com.phauer.krecruiter.util.requestApplications
+import com.phauer.krecruiter.util.toInstant
+import com.phauer.krecruiter.util.toJson
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk

@@ -3,13 +3,16 @@
 ## Hands-On Part 1: Mock-Based Unit Tests
 
 - `ApplicationDAO`
+    - Tip: With `PostgreSQLInstance.jdbi` you can create a `Jdbi` instance which can be passed to the `ApplicationDAO`. The `TestDAO` can be used to useful functions to create the schema and fill the table with test data.
     - Filtering by `ApplicationState` should only return the applications with the requested state.
     - Return all applications if no state is requested.
     - Order applications by `dateCreated`.
 - `AddressValidationClient`
+    - Tip: Check out the file `util/MockServerUtils.kt` in the test folder. It contains many useful functions to use the WebMockServer API.
     - Pass a 200 response to the caller with a success object.
     - Return an error object if the validation service returns a 500.
 - `ApplicationController`
+    - Tip: Check out the file `util/MockMvcUtils.kt` in the test folder. It contains many useful functions to use Spring's MockMvc API.
     - List applications (`GET /applications`)
         - A `GET` request on `/applications` should return a list of JSON documents with the fields `id`, `fullName`, `jobTitle`, `state` and `dateCreated` from the database. 
     - Create an application (`POST /applications`)

@@ -9,7 +9,7 @@ import java.time.Instant
 
 @Component
 class ApplicationDAO(
-    val jdbi: Jdbi
+    private val jdbi: Jdbi
 ) {
     fun findAllApplications(state: ApplicationState?): List<ApplicationWithApplicantsEntity> {
         return jdbi.withHandleUnchecked<List<ApplicationWithApplicantsEntity>> {

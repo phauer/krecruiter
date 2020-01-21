@@ -1,17 +1,20 @@
 package com.phauer.krecruiter.applicationApi
 
-import com.phauer.krecruiter.PostgreSQLInstance
-import com.phauer.krecruiter.TestDAO
-import com.phauer.krecruiter.TestObjects
 import com.phauer.krecruiter.common.ApiPaths
 import com.phauer.krecruiter.common.ApplicationState
-import com.phauer.krecruiter.createApplicantEntity
-import com.phauer.krecruiter.createApplicationEntity
-import com.phauer.krecruiter.createMockMvc
-import com.phauer.krecruiter.requestApplications
-import com.phauer.krecruiter.reset
-import com.phauer.krecruiter.toInstant
-import com.phauer.krecruiter.toJson
+import com.phauer.krecruiter.util.PostgreSQLInstance
+import com.phauer.krecruiter.util.TestDAO
+import com.phauer.krecruiter.util.TestObjects
+import com.phauer.krecruiter.util.createApplicantEntity
+import com.phauer.krecruiter.util.createApplicationEntity
+import com.phauer.krecruiter.util.createMockMvc
+import com.phauer.krecruiter.util.createStartedMockServer
+import com.phauer.krecruiter.util.enqueueValidationResponse
+import com.phauer.krecruiter.util.getUrl
+import com.phauer.krecruiter.util.requestApplications
+import com.phauer.krecruiter.util.reset
+import com.phauer.krecruiter.util.toInstant
+import com.phauer.krecruiter.util.toJson
 import io.kotlintest.Spec
 import io.kotlintest.TestCase
 import io.kotlintest.data.suspend.forall
@@ -31,7 +34,6 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
 import java.time.Clock
@@ -40,14 +42,14 @@ import java.time.Instant
 class ApplicationControllerKotlinTest : FreeSpec() {
 
     private val clock = mockk<Clock>()
-    private val validationService = MockWebServer().apply { start() }
+    private val validationService = createStartedMockServer()
     private val controller = ApplicationController(
         dao = ApplicationDAO(PostgreSQLInstance.jdbi),
         clock = clock,
         addressValidationClient = AddressValidationClient(
             client = TestObjects.httpClient,
             mapper = TestObjects.mapper,
-            baseUrl = validationService.url("").toString()
+            baseUrl = validationService.getUrl()
         )
     )
     private val mvc = createMockMvc(controller)
@@ -266,14 +268,6 @@ class ApplicationControllerKotlinTest : FreeSpec() {
         testDAO.insert(createApplicantEntity(id = id, firstName = "John", lastName = "Doe"))
         testDAO.insert(createApplicationEntity(id = id, applicantId = id, state = state, dateCreated = dateCreated))
     }
-}
-
-private fun MockWebServer.enqueueValidationResponse(code: Int, valid: Boolean) {
-    val response = MockResponse()
-        .addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-        .setBody(AddressValidationResponseDTO(valid = valid, address = "test address").toJson())
-        .setResponseCode(code)
-    enqueue(response)
 }
 
 class ApplicationCreationDTOGenerator : Gen<ApplicationCreationDTO> {
