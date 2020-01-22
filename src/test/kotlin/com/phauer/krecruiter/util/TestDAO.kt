@@ -2,56 +2,22 @@ package com.phauer.krecruiter.util
 
 import com.phauer.krecruiter.common.ApplicantEntity
 import com.phauer.krecruiter.common.ApplicationEntity
-import com.phauer.krecruiter.initializer.ApplicantInitializerDAO
-import com.phauer.krecruiter.initializer.ApplicationInitializerDAO
-import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.sqlobject.SqlObject
-import org.jdbi.v3.sqlobject.kotlin.onDemand
+import org.jdbi.v3.sqlobject.customizer.BindBean
+import org.jdbi.v3.sqlobject.statement.SqlBatch
 import org.jdbi.v3.sqlobject.statement.SqlQuery
 import org.jdbi.v3.sqlobject.statement.SqlUpdate
 
-class TestDAO(
-    jdbi: Jdbi
-) {
-    private val applicationDao: ApplicationInitializerDAO = jdbi.onDemand()
-    private val applicantDao: ApplicantInitializerDAO = jdbi.onDemand()
-    private val helperDao: TestDAOHelper = jdbi.onDemand()
-
-    fun recreateSchema() {
-        applicationDao.dropTable()
-        applicantDao.dropTable()
-
-        applicantDao.createTable()
-        applicationDao.createTable()
-    }
-
-    fun clearTables() {
-        helperDao.truncateTables()
-    }
-
-    fun insert(vararg applicantEntities: ApplicantEntity) {
-        applicantDao.insert(applicantEntities.toList())
-    }
-
-    fun insert(vararg applicationEntities: ApplicationEntity) {
-        applicationDao.insert(applicationEntities.toList())
-    }
-
-    fun findOneApplication() = helperDao.findOneApplication()
-    fun findOneApplicant() = helperDao.findOneApplicant()
-
-}
-
-private interface TestDAOHelper : SqlObject {
+interface TestDAO : SqlObject {
     @SqlUpdate("TRUNCATE TABLE application, applicant RESTART IDENTITY")
-    fun truncateTables()
+    fun clearTables()
 
     @SqlQuery(
         """
         SELECT id, applicantId, jobTitle, state, dateCreated 
         FROM application
         LIMIT 1
-    """
+        """
     )
     fun findOneApplication(): ApplicationEntity?
 
@@ -60,7 +26,19 @@ private interface TestDAOHelper : SqlObject {
         SELECT id, firstName, lastName, street, city, dateCreated 
         FROM applicant
         LIMIT 1
-    """
+        """
     )
     fun findOneApplicant(): ApplicantEntity?
+
+    @SqlBatch(
+        """INSERT INTO applicant(id, firstName, lastName, street, city, dateCreated)
+            VALUES (:id, :firstName, :lastName, :street, :city, :dateCreated)"""
+    )
+    fun insert(@BindBean vararg applicants: ApplicantEntity)
+
+    @SqlBatch(
+        """INSERT INTO application(id, applicantId, jobTitle, state, dateCreated)
+            VALUES (:id, :applicantId, :jobTitle, :state, :dateCreated)"""
+    )
+    fun insert(@BindBean vararg applications: ApplicationEntity)
 }

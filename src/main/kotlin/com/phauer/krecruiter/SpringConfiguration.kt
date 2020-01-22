@@ -5,18 +5,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import com.phauer.krecruiter.initializer.ApplicantInitializerDAO
-import com.phauer.krecruiter.initializer.ApplicationInitializerDAO
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import org.jdbi.v3.core.Jdbi
-import org.postgresql.ds.PGSimpleDataSource
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.time.Clock
 import java.util.concurrent.TimeUnit
+import javax.sql.DataSource
 
 @Configuration
 class SpringConfiguration{
@@ -47,21 +45,7 @@ class SpringConfiguration{
     fun clock(): Clock = Clock.systemUTC()
 
     @Bean
-    fun jdbi(): Jdbi {
-        val ds = PGSimpleDataSource().apply {
-            setUrl("jdbc:postgresql://localhost:6000/krecruiter")
-            user = "user"
-            password = "password"
-            loadBalanceHosts = true
-        }
-        return Jdbi.create(ds).installPlugins()
-    }
-
-    @Bean
-    fun applicationInitializerDAO(jdbi: Jdbi): ApplicationInitializerDAO = jdbi.onDemand(ApplicationInitializerDAO::class.java)
-
-    @Bean
-    fun applicantInitializerDAO(jdbi: Jdbi): ApplicantInitializerDAO = jdbi.onDemand(ApplicantInitializerDAO::class.java)
+    fun jdbi(dataSource: DataSource) = Jdbi.create(dataSource).installPlugins()
 }
 
 object UserAgentInterceptor : Interceptor {

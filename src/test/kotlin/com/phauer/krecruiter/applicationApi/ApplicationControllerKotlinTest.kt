@@ -15,7 +15,6 @@ import com.phauer.krecruiter.util.requestApplications
 import com.phauer.krecruiter.util.reset
 import com.phauer.krecruiter.util.toInstant
 import com.phauer.krecruiter.util.toJson
-import io.kotlintest.Spec
 import io.kotlintest.TestCase
 import io.kotlintest.data.suspend.forall
 import io.kotlintest.matchers.asClue
@@ -34,6 +33,7 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
+import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
 import java.time.Clock
@@ -53,12 +53,7 @@ class ApplicationControllerKotlinTest : FreeSpec() {
         )
     )
     private val mvc = createMockMvc(controller)
-    private val testDAO = TestDAO(PostgreSQLInstance.jdbi)
-
-
-    override fun beforeSpec(spec: Spec) {
-        testDAO.recreateSchema()
-    }
+    private val testDAO = PostgreSQLInstance.jdbi.onDemand<TestDAO>()
 
     override fun beforeTest(testCase: TestCase) {
         clearAllMocks()

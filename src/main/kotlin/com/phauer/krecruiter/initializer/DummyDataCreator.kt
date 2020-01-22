@@ -5,39 +5,37 @@ import com.phauer.krecruiter.common.ApplicantEntity
 import com.phauer.krecruiter.common.ApplicationEntity
 import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.common.logger
+import org.jdbi.v3.core.Jdbi
+import org.jdbi.v3.sqlobject.SqlObject
+import org.jdbi.v3.sqlobject.customizer.BindBean
+import org.jdbi.v3.sqlobject.statement.SqlBatch
+import org.jdbi.v3.sqlobject.statement.SqlUpdate
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
-/**
- * In a real application, we would use Flyway for schema creation and won't initialize the database with dummy data on startup.
- */
 @Component
 class SchemaInitializer(
-    private val applicationDao: ApplicationInitializerDAO,
-    private val applicantDao: ApplicantInitializerDAO
+    jdbi: Jdbi
 ) : ApplicationRunner {
     private val log by logger()
     private val faker = Faker()
     private val applicantAmount = 500
+    private val dao = jdbi.onDemand(DummyDataCreatorDAO::class.java)
 
     override fun run(args: ApplicationArguments) {
-        log.info("Start Schema Creation...")
+        log.info("Start Dummy Data Creation...")
 
-        applicationDao.dropTable()
-        applicantDao.dropTable()
-
-        applicantDao.createTable()
-        applicationDao.createTable()
+        dao.clearTables()
 
         val applicants = generateApplicants()
-        applicantDao.insert(applicants)
+        dao.insertApplicants(applicants)
 
         val applications = generateApplications(applicants)
-        applicationDao.insert(applications)
+        dao.insertApplications(applications)
 
-        log.info("Finished Schema Creation.")
+        log.info("Finished Dummy Data  Creation.")
     }
 
     private fun generateApplicants() = (0..applicantAmount).map {
@@ -60,4 +58,23 @@ class SchemaInitializer(
             dateCreated = faker.date().past(4000, TimeUnit.DAYS).toInstant()
         )
     }
+
 }
+
+private interface DummyDataCreatorDAO : SqlObject {
+    @SqlBatch(
+        """INSERT INTO applicant(id, firstName, lastName, street, city, dateCreated)
+        VALUES (:id, :firstName, :lastName, :street, :city, :dateCreated)"""
+    )
+    fun insertApplicants(@BindBean applicants: List<ApplicantEntity>)
+
+    @SqlBatch(
+        """INSERT INTO application(id, applicantId, jobTitle, state, dateCreated)
+        VALUES (:id, :applicantId, :jobTitle, :state, :dateCreated)"""
+    )
+    fun insertApplications(@BindBean applications: List<ApplicationEntity>)
+
+    @SqlUpdate("TRUNCATE TABLE application, applicant RESTART IDENTITY")
+    fun clearTables()
+}
+

@@ -20,7 +20,7 @@ import io.mockk.every
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeAll
+import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -47,12 +47,7 @@ internal class ApplicationControllerITest {
         )
     )
     private val mvc = createMockMvc(controller)
-    private val testDAO = TestDAO(PostgreSQLInstance.jdbi)
-
-    @BeforeAll
-    fun schemaSetup() {
-        testDAO.recreateSchema()
-    }
+    private val testDAO = PostgreSQLInstance.jdbi.onDemand<TestDAO>()
 
     @BeforeEach
     fun clear() {

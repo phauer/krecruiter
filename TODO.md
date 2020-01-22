@@ -1,6 +1,5 @@
 # TODOs
 
-- use flyway instead of DIY-schema creation
 - create branches:
     - master (complete solution) 
     - 1-mock-based-unit-tests
