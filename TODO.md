@@ -1,5 +1,6 @@
 # TODOs
 
+- reuse with testcontainers? document (.testcontainers.properties). remove debug output.
 - create branches:
     - master (complete solution) 
     - 1-mock-based-unit-tests

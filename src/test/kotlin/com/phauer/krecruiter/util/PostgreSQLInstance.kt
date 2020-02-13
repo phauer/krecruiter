@@ -23,7 +23,8 @@ object PostgreSQLInstance {
             password = "password"
         }
     } else {
-        val db = KPostgreSQLContainer("postgres:11.2-alpine")
+        val db = KPostgreSQLContainer("postgres:12.1-alpine")
+        db.withReuse(true)
         db.start()
         PGSimpleDataSource().apply {
             setUrl(db.jdbcUrl)
