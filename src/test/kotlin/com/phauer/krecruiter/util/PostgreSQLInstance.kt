@@ -23,9 +23,13 @@ object PostgreSQLInstance {
             password = "password"
         }
     } else {
-        val db = KPostgreSQLContainer("postgres:12.1-alpine")
-        db.withReuse(true)
-        db.start()
+        val db = KPostgreSQLContainer("postgres:12.1-alpine").apply {
+            // reuse: good, but still takes 2 - 3 s more than the docker-compose-based approach for shorting the turn-around time.
+            // mind that you have to add "testcontainers.reuse.enable=true" to ~/.testcontainers.properties
+            // consider the env var TESTCONTAINERS_RYUK_DISABLED=true for further speed up
+            // withReuse(true)
+            start()
+        }
         PGSimpleDataSource().apply {
             setUrl(db.jdbcUrl)
             user = db.username
