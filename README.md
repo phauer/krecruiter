@@ -17,7 +17,7 @@ Example application to improve your testing skills with Kotlin.
 Checkout:
 
 ```bash
-git clone git@github.com:phauer/krecruiter.git
+git clone https://github.com/phauer/krecruiter.git
 cd krecruiter
 ```
 
