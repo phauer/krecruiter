@@ -6,6 +6,7 @@
     - 2-integration-tests
     - 3-kotlintest
     - -> document in README
+- after final KotlinTest/Kotest 4.0 release (currently beta) -> migrate to it and rename everything consequently to Kotest
 - pass info to attendees.
 - more tests?:
     - check out java testing guide: what else can we test that require special assertions.

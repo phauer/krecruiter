@@ -28,7 +28,7 @@
 - Don't create an application and return a 400 if an invalid JSON is passed. Try at least the strings "", "asdf", "2", "{}", "[]".
 
 
-## Hands-On Part 3: KotlinTest, Table-Driven Testing, Property-Based Testing
+## Hands-On Part 3: KotlinTest/Kotest, Table-Driven Testing, Property-Based Testing
 
 - Migrate all test from part 2 to the test `ApplicationControllerKotlinTest` which bases on [KotlinTest](https://github.com/kotlintest/kotlintest). Mainly, this requires changing the matchers and the definition of test names, nesting and parameterized test.
     - The `FreeSpec` [testing style](https://github.com/kotlintest/kotlintest/blob/master/doc/styles.md) supports grouping which can be used instead of JUnit5's `@Nested`.
