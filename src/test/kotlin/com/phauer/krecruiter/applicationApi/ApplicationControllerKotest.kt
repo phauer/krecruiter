@@ -1,6 +1,8 @@
 package com.phauer.krecruiter.applicationApi
 
 import com.phauer.krecruiter.common.ApiPaths
+import com.phauer.krecruiter.common.ApplicantEntity
+import com.phauer.krecruiter.common.ApplicationEntity
 import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.util.PostgreSQLInstance
 import com.phauer.krecruiter.util.TestDAO
@@ -15,20 +17,21 @@ import com.phauer.krecruiter.util.requestApplications
 import com.phauer.krecruiter.util.reset
 import com.phauer.krecruiter.util.toInstant
 import com.phauer.krecruiter.util.toJson
-import io.kotlintest.TestCase
-import io.kotlintest.data.suspend.forall
-import io.kotlintest.matchers.asClue
-import io.kotlintest.matchers.collections.shouldContain
-import io.kotlintest.matchers.collections.shouldContainAll
-import io.kotlintest.matchers.collections.shouldContainInOrder
-import io.kotlintest.matchers.string.shouldContainIgnoringCase
-import io.kotlintest.matchers.types.shouldBeNull
-import io.kotlintest.matchers.types.shouldNotBeNull
-import io.kotlintest.properties.Gen
-import io.kotlintest.properties.assertAll
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.FreeSpec
-import io.kotlintest.tables.row
+import io.kotest.assertions.asClue
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.core.test.TestCase
+import io.kotest.data.forAll
+import io.kotest.data.row
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldContainInOrder
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContainIgnoringCase
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.string
+import io.kotest.property.checkAll
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -39,7 +42,7 @@ import org.springframework.test.web.servlet.post
 import java.time.Clock
 import java.time.Instant
 
-class ApplicationControllerKotlinTest : FreeSpec() {
+class ApplicationControllerKotest : FreeSpec() {
 
     private val clock = mockk<Clock>()
     private val validationService = createStartedMockServer()
@@ -133,14 +136,12 @@ class ApplicationControllerKotlinTest : FreeSpec() {
 
                 postApplicationAndExpect201(requestApplication)
 
-                testDAO.findOneApplication().asClue {
-                    it.shouldNotBeNull()
+                findOneApplication().asClue {
                     it.jobTitle shouldBe "Software Engineer"
                     it.state shouldBe ApplicationState.RECEIVED
                     it.dateCreated shouldBe 1.toInstant()
                 }
-                testDAO.findOneApplicant().asClue {
-                    it.shouldNotBeNull()
+                findOneApplicant().asClue {
                     it.firstName shouldBe "Anna"
                     it.lastName shouldBe "Schmidt"
                     it.city shouldBe "Leipzig"
@@ -149,25 +150,34 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                 }
             }
 
-            // currently, we can't put the test definition inside the assertAll-lambda (like we can do for table-driven tests)
-            // see https://github.com/kotlintest/kotlintest/issues/717
-            // we have to wait for KotlinTest 4.0
             "Create an application with randomized data" {
-                assertAll(50, ApplicationCreationDTOGenerator()) { requestedApplication: ApplicationCreationDTO ->
-                    beforeTest(mockk<TestCase>()) // beforeTest() cleanup is not executed automatically. -> KotlinTest 4.0
+                checkAll(
+                    20,
+                    Arb.string(maxSize = 60),
+                    Arb.string(maxSize = 60),
+                    Arb.string(maxSize = 60),
+                    Arb.string(maxSize = 30),
+                    Arb.string(maxSize = 120)
+                ) { firstName, lastName, street, city, jobTitle ->
+                    val requestedApplication = ApplicationCreationDTO(
+                        firstName = firstName,
+                        lastName = lastName,
+                        street = street,
+                        city = city,
+                        jobTitle = jobTitle
+                    )
+                    beforeTest(mockk<TestCase>()) // beforeTest() cleanup is not executed automatically
                     mockClock(1.toInstant())
                     validationService.enqueueValidationResponse(code = 200, valid = true)
 
                     postApplicationAndExpect201(requestedApplication)
 
-                    testDAO.findOneApplication().asClue {
-                        it.shouldNotBeNull()
+                    findOneApplication().asClue {
                         it.jobTitle shouldBe requestedApplication.jobTitle
                         it.state shouldBe ApplicationState.RECEIVED
                         it.dateCreated shouldBe 1.toInstant()
                     }
-                    testDAO.findOneApplicant().asClue {
-                        it.shouldNotBeNull()
+                    findOneApplicant().asClue {
                         it.firstName shouldBe requestedApplication.firstName
                         it.lastName shouldBe requestedApplication.lastName
                         it.city shouldBe requestedApplication.city
@@ -197,7 +207,7 @@ class ApplicationControllerKotlinTest : FreeSpec() {
             }
 
             "dont create an application and return a 400 if an required JSON field is missing." - {
-                forall( // there are two forall methods. import the one in the suspend package
+                forAll( // there are two forall methods. import the one in the suspend package
                     row(MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = "street", city = "city", jobTitle = null)),
                     row(MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = "street", city = null, jobTitle = "title")),
                     row(MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = null, city = "city", jobTitle = "title")),
@@ -213,7 +223,7 @@ class ApplicationControllerKotlinTest : FreeSpec() {
             }
 
             "dont create an application and return a 400 if an invalid JSON is passed" - {
-                forall( // there are two forall methods. import the one in the suspend package
+                forAll( // there are two forall methods. import the one in the suspend package
                     row(""""""),
                     row("""asdfasfd"""),
                     row("""2"""),
@@ -229,6 +239,18 @@ class ApplicationControllerKotlinTest : FreeSpec() {
                 }
             }
         }
+    }
+
+    private fun findOneApplication(): ApplicationEntity {
+        val application = testDAO.findOneApplication()
+        application.shouldNotBeNull()
+        return application
+    }
+
+    private fun findOneApplicant(): ApplicantEntity {
+        val applicant = testDAO.findOneApplicant()
+        applicant.shouldNotBeNull()
+        return applicant
     }
 
     private fun postApplicationAndExpect400(json: String) {
@@ -263,20 +285,4 @@ class ApplicationControllerKotlinTest : FreeSpec() {
         testDAO.insert(createApplicantEntity(id = id, firstName = "John", lastName = "Doe"))
         testDAO.insert(createApplicationEntity(id = id, applicantId = id, state = state, dateCreated = dateCreated))
     }
-}
-
-class ApplicationCreationDTOGenerator : Gen<ApplicationCreationDTO> {
-    // no edge cases for ApplicationCreationDTO
-    override fun constants() = emptyList<ApplicationCreationDTO>()
-
-    override fun random() = generateSequence {
-        ApplicationCreationDTO(
-            firstName = Gen.string(maxSize = 60).random().first(),
-            lastName = Gen.string(maxSize = 60).random().first(),
-            street = Gen.string(maxSize = 60).random().first(),
-            city = Gen.string(maxSize = 30).random().first(),
-            jobTitle = Gen.string(maxSize = 120).random().first()
-        )
-    }
-
 }

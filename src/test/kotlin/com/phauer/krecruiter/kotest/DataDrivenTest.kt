@@ -1,14 +1,14 @@
-package com.phauer.krecruiter.kotlintest
+package com.phauer.krecruiter.kotest
 
-import io.kotlintest.data.suspend.forall
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.FreeSpec
-import io.kotlintest.tables.row
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
+import io.kotest.matchers.shouldBe
 
-class TableDrivenTest : FreeSpec() {
+class DataDrivenTest : FreeSpec() {
     init {
         "parse valid tokens" - {
-            forall(
+            forAll(
                 row("1511443755_2", Token(1511443755, "2")),
                 row("151175_13521", Token(151175, "13521")),
                 row("151144375_id", Token(151144375, "id")),
@@ -21,7 +21,7 @@ class TableDrivenTest : FreeSpec() {
             }
         }
         "parse valid tokens (data class)" - {
-            forall(
+            forAll(
                 row(TestData(input = "1511443755_2", expected = Token(1511443755, "2"))),
                 row(TestData(input = "151175_13521", expected = Token(151175, "13521"))),
                 row(TestData(input = "151144375_id", expected = Token(151144375, "id"))),

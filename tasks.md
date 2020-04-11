@@ -28,19 +28,18 @@
 - Don't create an application and return a 400 if an invalid JSON is passed. Try at least the strings "", "asdf", "2", "{}", "[]".
 
 
-## Hands-On Part 3: KotlinTest/Kotest, Table-Driven Testing, Property-Based Testing
+## Hands-On Part 3: Kotest, Table-Driven Testing, Property-Based Testing
 
-- Migrate all test from part 2 to the test `ApplicationControllerKotlinTest` which bases on [KotlinTest](https://github.com/kotlintest/kotlintest). Mainly, this requires changing the matchers and the definition of test names, nesting and parameterized test.
-    - The `FreeSpec` [testing style](https://github.com/kotlintest/kotlintest/blob/master/doc/styles.md) supports grouping which can be used instead of JUnit5's `@Nested`.
-    - Use KotlinTest's [matchers](https://github.com/kotlintest/kotlintest/blob/master/doc/matchers.md) instead of AssertJ. The matchers start with `should*`. This can be used for auto-completion.
-    - Use [table-driven testing for parameterized tests](https://github.com/kotlintest/kotlintest/blob/master/doc/reference.md#table-driven-testing)
-- Write a [property-based test](https://github.com/kotlintest/kotlintest/blob/master/doc/reference.md#property-based-testing-) that generates random values for the application fields and create an application with this data.
+- Migrate all test from part 2 to the test `ApplicationControllerKotest` which bases on [Kotest](https://github.com/kotest/kotest/). Mainly, this requires changing the matchers and the definition of test names, nesting and parameterized test.
+    - The `FreeSpec` [testing style](https://github.com/kotest/kotest/blob/master/doc/styles.md) supports grouping which can be used instead of JUnit5's `@Nested`.
+    - Use Kotest's [matchers](https://github.com/kotest/kotest/blob/master/doc/matchers.md) instead of AssertJ. The matchers start with `should*`. This can be used for auto-completion.
+    - Use [data-driven testing for parameterized tests](https://github.com/kotest/kotest/blob/master/doc/data_driven_testing.md)
+- Write a [property-based test](https://github.com/kotest/kotest/blob/master/doc/property_testing.md) that generates random values for the application fields and create an application with this data.
     - You can rewrite an existing test for this.
-    - You can write a [custom generator](https://github.com/kotlintest/kotlintest/blob/master/doc/reference.md#custom-generators) to create an `ApplicationCreationDTO` with randomized values.
     - Hint: Unfortunately, property-based tests and table-driven tests don't call the defined `beforeTest()` method. So you have to call it manually with `beforeTest(mockk<TestCase>())` before each iteration.  
-- Other interesting features of KotlinTest:
-    - [Inspectors for testing collections](https://github.com/kotlintest/kotlintest/blob/master/doc/reference.md#inspectors)
-    - [Custom Matcher](https://github.com/kotlintest/kotlintest/blob/master/doc/reference.md#custom-matchers)
+- Other interesting features of Kotest:
+    - [Inspectors for testing collections](https://github.com/kotest/kotest/blob/master/doc/reference.md#inspectors)
+    - [Custom Matcher](https://github.com/kotest/kotest/blob/master/doc/reference.md#custom-matchers)
     
 ## Optional Tasks
 
@@ -48,4 +47,4 @@
     - Read briefly through [Modern Best Practices for Testing in Java](https://phauer.com/2019/modern-best-practices-testing-java/). Although the examples are written in Java, the described best practices also apply to Kotlin test code. 
     - Are there any recommendations that can improve your test code? Try to refactor your code.
 - Test that a correct `location` header is returned in the response for creating an application. It should look like `/applications/<applicationId>`.
-- Rewrite the tests using other [testing styles](https://github.com/kotlintest/kotlintest/blob/master/doc/styles.md) provided by KotlinTest.
+- Rewrite the tests using other [testing styles](https://github.com/kotest/kotest/blob/master/doc/styles.md) provided by Kotest.
