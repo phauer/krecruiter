@@ -1,6 +1,8 @@
 package com.phauer.krecruiter.applicationApi
 
 import com.phauer.krecruiter.common.ApiPaths
+import com.phauer.krecruiter.common.ApplicantEntity
+import com.phauer.krecruiter.common.ApplicationEntity
 import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.util.PostgreSQLInstance
 import com.phauer.krecruiter.util.TestDAO
@@ -15,11 +17,16 @@ import com.phauer.krecruiter.util.requestApplications
 import com.phauer.krecruiter.util.reset
 import com.phauer.krecruiter.util.toInstant
 import com.phauer.krecruiter.util.toJson
+import io.kotest.assertions.asClue
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContainIgnoringCase
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
-import org.assertj.core.api.Assertions.assertThat
 import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -33,7 +40,7 @@ import java.time.Clock
 import java.time.Instant
 import java.util.stream.Stream
 
-internal class ApplicationControllerITest {
+class ApplicationControllerITest {
 
     private val clock = mockk<Clock>()
     private val validationService = createStartedMockServer()
@@ -76,7 +83,7 @@ internal class ApplicationControllerITest {
 
             val actualResponseDTO = mvc.requestApplications()
 
-            assertThat(actualResponseDTO).containsExactly(
+            actualResponseDTO.shouldContainExactly(
                 ApplicationDTO(
                     id = 100,
                     fullName = "John Doe",
@@ -97,9 +104,9 @@ internal class ApplicationControllerITest {
 
             val actualResponseDTO = mvc.requestApplications(state = ApplicationState.REJECTED)
 
-            assertThat(actualResponseDTO)
-                .extracting<Int>(ApplicationDTO::id)
-                .containsOnly(100, 200)
+            actualResponseDTO.asClue {
+                it.map(ApplicationDTO::id).shouldContainExactly(100, 200)
+            }
         }
 
         @Test
@@ -109,9 +116,9 @@ internal class ApplicationControllerITest {
 
             val actualResponseDTO = mvc.requestApplications(state = null)
 
-            assertThat(actualResponseDTO)
-                .extracting<Int>(ApplicationDTO::id)
-                .containsOnly(100, 200)
+            actualResponseDTO.asClue {
+                it.map(ApplicationDTO::id).shouldContainExactly(100, 200)
+            }
         }
 
 
@@ -123,9 +130,9 @@ internal class ApplicationControllerITest {
 
             val actualResponseDTO = mvc.requestApplications()
 
-            assertThat(actualResponseDTO)
-                .extracting<Int>(ApplicationDTO::id)
-                .containsExactly(300, 100, 200)
+            actualResponseDTO.asClue {
+                it.map(ApplicationDTO::id).shouldContainExactly(300, 100, 200)
+            }
         }
     }
 
@@ -146,17 +153,17 @@ internal class ApplicationControllerITest {
 
             postApplicationAndExpect201(requestApplication)
 
-            with(testDAO.findOneApplication()!!) {
-                assertThat(jobTitle).isEqualTo("Software Engineer")
-                assertThat(state).isEqualTo(ApplicationState.RECEIVED)
-                assertThat(dateCreated).isEqualTo(1.toInstant())
+            findOneApplication().asClue {
+                it.jobTitle shouldBe "Software Engineer"
+                it.state shouldBe ApplicationState.RECEIVED
+                it.dateCreated shouldBe 1.toInstant()
             }
-            with(testDAO.findOneApplicant()!!) {
-                assertThat(firstName).isEqualTo("Anna")
-                assertThat(lastName).isEqualTo("Schmidt")
-                assertThat(city).isEqualTo("Leipzig")
-                assertThat(street).isEqualTo("Long Street")
-                assertThat(dateCreated).isEqualTo(1.toInstant())
+            findOneApplicant().asClue {
+                it.firstName shouldBe "Anna"
+                it.lastName shouldBe "Schmidt"
+                it.city shouldBe "Leipzig"
+                it.street shouldBe "Long Street"
+                it.dateCreated shouldBe 1.toInstant()
             }
         }
 
@@ -167,8 +174,8 @@ internal class ApplicationControllerITest {
 
             val response = postApplicationAndGetResponse(requestApplication)
 
-            assertThat(response.status).isEqualTo(400)
-            assertThat(response.contentAsString).containsIgnoringCase("invalid address")
+            response.status shouldBe 400
+            response.contentAsString shouldContainIgnoringCase "invalid address"
         }
 
         @Test
@@ -178,15 +185,15 @@ internal class ApplicationControllerITest {
 
             val response = postApplicationAndGetResponse(requestApplication)
 
-            assertThat(response.status).isEqualTo(500)
+            response.status shouldBe 500
         }
 
         @ParameterizedTest
         @MethodSource("missingFieldDtoProvider")
         fun `dont create an application and return a 400 if an required JSON field is missing`(dtoWithMissingField: MissingFieldApplicationDTO) {
             postApplicationAndExpect400(dtoWithMissingField.toJson())
-            assertThat(testDAO.findOneApplication()).isNull()
-            assertThat(testDAO.findOneApplicant()).isNull()
+            testDAO.findOneApplication().shouldBeNull()
+            testDAO.findOneApplicant().shouldBeNull()
         }
 
         @ParameterizedTest
@@ -202,8 +209,8 @@ internal class ApplicationControllerITest {
         )
         fun `dont create an application and return a 400 if an invalid JSON is passed`(invalidJson: String) {
             postApplicationAndExpect400(invalidJson)
-            assertThat(testDAO.findOneApplication()).isNull()
-            assertThat(testDAO.findOneApplicant()).isNull()
+            testDAO.findOneApplication().shouldBeNull()
+            testDAO.findOneApplicant().shouldBeNull()
         }
 
         private fun missingFieldDtoProvider() = Stream.of(
@@ -213,6 +220,18 @@ internal class ApplicationControllerITest {
             , MissingFieldApplicationDTO(firstName = "name1", lastName = null, street = "street", city = "city", jobTitle = "title")
             , MissingFieldApplicationDTO(firstName = null, lastName = "name2", street = "street", city = "city", jobTitle = "title")
         )
+
+        private fun findOneApplication(): ApplicationEntity {
+            val application = testDAO.findOneApplication()
+            application.shouldNotBeNull()
+            return application
+        }
+
+        private fun findOneApplicant(): ApplicantEntity {
+            val applicant = testDAO.findOneApplicant()
+            applicant.shouldNotBeNull()
+            return applicant
+        }
 
         private fun postApplicationAndExpect400(json: String) {
             mvc.post(ApiPaths.applications) {

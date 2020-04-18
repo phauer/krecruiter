@@ -22,9 +22,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.data.forAll
 import io.kotest.data.row
-import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.collections.shouldContainAll
-import io.kotest.matchers.collections.shouldContainInOrder
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -82,12 +80,14 @@ class ApplicationControllerKotest : FreeSpec() {
 
                 val actualResponseDTO = mvc.requestApplications()
 
-                actualResponseDTO shouldContain ApplicationDTO(
-                    id = 100,
-                    fullName = "John Doe",
-                    jobTitle = "Software Developer",
-                    state = ApplicationState.RECEIVED,
-                    dateCreated = 100.toInstant()
+                actualResponseDTO.shouldContainExactly(
+                    ApplicationDTO(
+                        id = 100,
+                        fullName = "John Doe",
+                        jobTitle = "Software Developer",
+                        state = ApplicationState.RECEIVED,
+                        dateCreated = 100.toInstant()
+                    )
                 )
             }
 
@@ -98,8 +98,10 @@ class ApplicationControllerKotest : FreeSpec() {
                 insertApplicationWithApplicant(id = 400, state = ApplicationState.EMPLOYED)
                 insertApplicationWithApplicant(id = 500, state = ApplicationState.RECEIVED)
 
-                mvc.requestApplications(state = ApplicationState.REJECTED).asClue {
-                    it.map(ApplicationDTO::id).shouldContainAll(100, 200)
+                val actualResponseDTO = mvc.requestApplications(state = ApplicationState.REJECTED)
+
+                actualResponseDTO.asClue {
+                    it.map(ApplicationDTO::id).shouldContainExactly(100, 200)
                 }
             }
 
@@ -107,8 +109,10 @@ class ApplicationControllerKotest : FreeSpec() {
                 insertApplicationWithApplicant(id = 100, state = ApplicationState.REJECTED)
                 insertApplicationWithApplicant(id = 200, state = ApplicationState.INVITED_TO_INTERVIEW)
 
-                mvc.requestApplications(state = null).asClue {
-                    it.map(ApplicationDTO::id).shouldContainAll(100, 200)
+                val actualResponseDTO = mvc.requestApplications(state = null)
+
+                actualResponseDTO.asClue {
+                    it.map(ApplicationDTO::id).shouldContainExactly(100, 200)
                 }
             }
 
@@ -117,8 +121,10 @@ class ApplicationControllerKotest : FreeSpec() {
                 insertApplicationWithApplicant(id = 200, dateCreated = 200.toInstant())
                 insertApplicationWithApplicant(id = 300, dateCreated = 3.toInstant())
 
-                mvc.requestApplications().asClue {
-                    it.map(ApplicationDTO::id).shouldContainInOrder(300, 100, 200)
+                val actualResponseDTO = mvc.requestApplications()
+
+                actualResponseDTO.asClue {
+                    it.map(ApplicationDTO::id).shouldContainExactly(300, 100, 200)
                 }
             }
         }

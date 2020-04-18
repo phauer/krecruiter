@@ -6,7 +6,8 @@ import com.phauer.krecruiter.util.TestDAO
 import com.phauer.krecruiter.util.createApplicantEntity
 import com.phauer.krecruiter.util.createApplicationEntity
 import com.phauer.krecruiter.util.toInstant
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.assertions.asClue
+import io.kotest.matchers.collections.shouldContainExactly
 import org.jdbi.v3.sqlobject.kotlin.onDemand
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -32,9 +33,9 @@ class ApplicationDAOTest {
 
         val actualApplications = dao.findAllApplications(state = ApplicationState.REJECTED)
 
-        assertThat(actualApplications)
-            .extracting<Int>(ApplicationWithApplicantsEntity::id)
-            .containsOnly(100, 200)
+        actualApplications.asClue {
+            it.map(ApplicationWithApplicantsEntity::id).shouldContainExactly(100, 200)
+        }
     }
 
     @Test
@@ -44,9 +45,9 @@ class ApplicationDAOTest {
 
         val actualApplications = dao.findAllApplications(state = null)
 
-        assertThat(actualApplications)
-            .extracting<Int>(ApplicationWithApplicantsEntity::id)
-            .containsOnly(100, 200)
+        actualApplications.asClue {
+            it.map(ApplicationWithApplicantsEntity::id).shouldContainExactly(100, 200)
+        }
     }
 
 
@@ -58,9 +59,9 @@ class ApplicationDAOTest {
 
         val actualApplications = dao.findAllApplications(state = null)
 
-        assertThat(actualApplications)
-            .extracting<Int>(ApplicationWithApplicantsEntity::id)
-            .containsExactly(300, 100, 200)
+        actualApplications.asClue {
+            it.map(ApplicationWithApplicantsEntity::id).shouldContainExactly(300, 100, 200)
+        }
     }
 
 

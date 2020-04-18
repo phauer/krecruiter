@@ -8,11 +8,13 @@ import com.phauer.krecruiter.util.createMockMvc
 import com.phauer.krecruiter.util.requestApplications
 import com.phauer.krecruiter.util.toInstant
 import com.phauer.krecruiter.util.toJson
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContainIgnoringCase
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -56,7 +58,7 @@ internal class ApplicationControllerTest {
 
             val actualResponseDTO = mvc.requestApplications()
 
-            assertThat(actualResponseDTO).containsExactly(
+            actualResponseDTO.shouldContainExactly(
                 ApplicationDTO(
                     id = 1,
                     fullName = "John Doe",
@@ -110,8 +112,8 @@ internal class ApplicationControllerTest {
 
             val response = postApplicationAndGetResponse(requestApplication)
 
-            assertThat(response.status).isEqualTo(400)
-            assertThat(response.contentAsString).containsIgnoringCase("invalid address")
+            response.status shouldBe 400
+            response.contentAsString shouldContainIgnoringCase "invalid address"
         }
 
         @Test
@@ -124,7 +126,7 @@ internal class ApplicationControllerTest {
 
             val response = postApplicationAndGetResponse(requestApplication)
 
-            assertThat(response.status).isEqualTo(500)
+            response.status shouldBe 500
         }
 
         private fun postApplicationAndGetResponse(requestApplication: ApplicationCreationDTO) = postApplication(requestApplication)

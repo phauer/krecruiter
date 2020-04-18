@@ -19,7 +19,6 @@
         - A `POST` request on `/applications` (containing an application as JSON in the body) creates an application and an applicant entry in the database with the posted values and the current timestamp.
         - Reject application creation when the AddressValidationService says that the submitted address is invalid.
         - Return a 500 status code if the request to the AddressValidationService was not successfully
-
     
 ## Hands-On Part 2: Integration Tests
 
@@ -30,19 +29,18 @@
 
 ## Hands-On Part 3: Kotest, Table-Driven Testing, Property-Based Testing
 
-- Migrate all test from part 2 to the test `ApplicationControllerKotest` which bases on [Kotest](https://github.com/kotest/kotest/). Mainly, this requires changing the matchers and the definition of test names, nesting and parameterized test.
-    - The `FreeSpec` [testing style](https://github.com/kotest/kotest/blob/master/doc/styles.md) supports grouping which can be used instead of JUnit5's `@Nested`.
-    - Use Kotest's [matchers](https://github.com/kotest/kotest/blob/master/doc/matchers.md) instead of AssertJ. The matchers start with `should*`. This can be used for auto-completion.
-    - Use [data-driven testing for parameterized tests](https://github.com/kotest/kotest/blob/master/doc/data_driven_testing.md)
+- Let's migrate our test suite `ApplicationControllerITest` from JUnit5 to Kotest.
+    - A good starting point is the `FreeSpec` [testing style](https://github.com/kotest/kotest/blob/master/doc/styles.md). It supports grouping which can be used instead of JUnit5's `@Nested`.
+    - First, create the fixture setup und grouping in Kotest
+    - Second, migrate 2 or more tests
+- Use [data-driven testing instead of parameterized tests](https://github.com/kotest/kotest/blob/master/doc/data_driven_testing.md). The tests that are checking for a 400 response are good candidates.
 - Write a [property-based test](https://github.com/kotest/kotest/blob/master/doc/property_testing.md) that generates random values for the application fields and create an application with this data.
     - You can rewrite an existing test for this.
-    - Hint: Unfortunately, property-based tests and table-driven tests don't call the defined `beforeTest()` method. So you have to call it manually with `beforeTest(mockk<TestCase>())` before each iteration.  
-- Other interesting features of Kotest:
-    - [Inspectors for testing collections](https://github.com/kotest/kotest/blob/master/doc/reference.md#inspectors)
-    - [Custom Matcher](https://github.com/kotest/kotest/blob/master/doc/reference.md#custom-matchers)
-    
+    - Hint: Unfortunately, property-based tests and table-driven tests don't call the defined `beforeTest()` method. So you have to call it manually with `beforeTest(mockk<TestCase>())` before each iteration.
+
 ## Optional Tasks
 
+- Read about Kotest's [Inspectors](https://github.com/kotest/kotest/blob/master/doc/reference.md#inspectors) or [Custom Matcher](https://github.com/kotest/kotest/blob/master/doc/reference.md#custom-matchers) and try to apply them.
 - Make your test code even cleaner, expressive and understandable.
     - Read briefly through [Modern Best Practices for Testing in Java](https://phauer.com/2019/modern-best-practices-testing-java/). Although the examples are written in Java, the described best practices also apply to Kotlin test code. 
     - Are there any recommendations that can improve your test code? Try to refactor your code.

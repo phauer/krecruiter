@@ -6,8 +6,9 @@ import com.phauer.krecruiter.util.createStartedMockServer
 import com.phauer.krecruiter.util.enqueueValidationResponse
 import com.phauer.krecruiter.util.getUrl
 import com.phauer.krecruiter.util.reset
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import okhttp3.mockwebserver.MockResponse
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -31,12 +32,11 @@ internal class AddressValidationClientTest {
 
         val response = client.validateAddress("Long Street", "Leipzig")
 
-        assertThat(response).isInstanceOfSatisfying(Outcome.Success::class.java) { success ->
+        response.shouldBeInstanceOf<Outcome.Success<AddressValidationResponseDTO>> { success ->
             val expectedDTO = AddressValidationResponseDTO(address = "Long Street", valid = true)
-            assertThat(success.value).isEqualTo(expectedDTO)
+            success.value shouldBe expectedDTO
         }
     }
-
 
     @Test
     fun `return an error object if the validation service returns a 500`() {
@@ -44,7 +44,7 @@ internal class AddressValidationClientTest {
 
         val response = client.validateAddress("Long Street", "Leipzig")
 
-        assertThat(response).isInstanceOf(Outcome.Error::class.java)
+        response.shouldBeInstanceOf<Outcome.Error>()
     }
 }
 
