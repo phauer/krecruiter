@@ -1,5 +1,6 @@
 package com.phauer.krecruiter.common
 
+import org.jdbi.v3.json.Json
 import java.time.Instant
 
 data class ApplicationEntity(
@@ -7,7 +8,9 @@ data class ApplicationEntity(
     val applicantId: Int,
     val jobTitle: String,
     val state: ApplicationState,
-    val dateCreated: Instant
+    val dateCreated: Instant,
+    @get:Json
+    val attachments: String?
 )
 
 data class ApplicantEntity(

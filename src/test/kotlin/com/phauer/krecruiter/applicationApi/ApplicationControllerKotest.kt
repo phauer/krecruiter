@@ -13,7 +13,6 @@ import com.phauer.krecruiter.util.createMockMvc
 import com.phauer.krecruiter.util.createStartedMockServer
 import com.phauer.krecruiter.util.enqueueValidationResponse
 import com.phauer.krecruiter.util.getUrl
-import com.phauer.krecruiter.util.requestApplications
 import com.phauer.krecruiter.util.reset
 import com.phauer.krecruiter.util.toInstant
 import com.phauer.krecruiter.util.toJson
@@ -22,7 +21,6 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
 import io.kotest.data.forAll
 import io.kotest.data.row
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -49,7 +47,8 @@ class ApplicationControllerKotest : FreeSpec() {
             client = TestObjects.httpClient,
             mapper = TestObjects.mapper,
             baseUrl = validationService.getUrl()
-        )
+        ),
+        mapper = TestObjects.mapper
     )
     private val mvc = createMockMvc(controller)
     private val testDAO = PostgreSQLInstance.jdbi.onDemand<TestDAO>()
@@ -63,60 +62,14 @@ class ApplicationControllerKotest : FreeSpec() {
     init {
         "Get Applications" - {
             "return all relevant fields from database" {
-                testDAO.insert(
-                    createApplicantEntity(id = 1, firstName = "John", lastName = "Doe")
-                )
-                testDAO.insert(
-                    createApplicationEntity(
-                        id = 100,
-                        applicantId = 1,
-                        jobTitle = "Software Developer",
-                        state = ApplicationState.RECEIVED,
-                        dateCreated = 100.toInstant()
-                    )
-                )
-
-                val actualResponseDTO = mvc.requestApplications()
-
-                actualResponseDTO.shouldContainExactly(
-                    ApplicationDTO(
-                        id = 100,
-                        fullName = "John Doe",
-                        jobTitle = "Software Developer",
-                        state = ApplicationState.RECEIVED,
-                        dateCreated = 100.toInstant()
-                    )
-                )
+                // ...
             }
 
             // other tests coming here...
         }
         "Create Application" - {
             "posting an application creates an application and an applicant entry in the database with the posted values and the current timestamp" {
-                mockClock(1.toInstant())
-                validationService.enqueueValidationResponse(code = 200, valid = true)
-                val requestApplication = createApplicantEntity(
-                    firstName = "Anna",
-                    lastName = "Schmidt",
-                    street = "Long Street",
-                    city = "Leipzig",
-                    jobTitle = "Software Engineer"
-                )
-
-                postApplicationAndExpect201(requestApplication)
-
-                findOneApplication().asClue {
-                    it.jobTitle shouldBe "Software Engineer"
-                    it.state shouldBe ApplicationState.RECEIVED
-                    it.dateCreated shouldBe 1.toInstant()
-                }
-                findOneApplicant().asClue {
-                    it.firstName shouldBe "Anna"
-                    it.lastName shouldBe "Schmidt"
-                    it.city shouldBe "Leipzig"
-                    it.street shouldBe "Long Street"
-                    it.dateCreated shouldBe 1.toInstant()
-                }
+                // ...
             }
 
             "Create an application with randomized data" {

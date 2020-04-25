@@ -18,7 +18,10 @@ import com.phauer.krecruiter.util.reset
 import com.phauer.krecruiter.util.toInstant
 import com.phauer.krecruiter.util.toJson
 import io.kotest.assertions.asClue
+import io.kotest.inspectors.forOne
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.maps.shouldBeEmpty
+import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -51,7 +54,8 @@ class ApplicationControllerITest {
             client = TestObjects.httpClient,
             mapper = TestObjects.mapper,
             baseUrl = validationService.getUrl()
-        )
+        ),
+        mapper = TestObjects.mapper
     )
     private val mvc = createMockMvc(controller)
     private val testDAO = PostgreSQLInstance.jdbi.onDemand<TestDAO>()
@@ -77,7 +81,8 @@ class ApplicationControllerITest {
                     applicantId = 1,
                     jobTitle = "Software Developer",
                     state = ApplicationState.RECEIVED,
-                    dateCreated = 100.toInstant()
+                    dateCreated = 100.toInstant(),
+                    attachments = null
                 )
             )
 
@@ -89,7 +94,8 @@ class ApplicationControllerITest {
                     fullName = "John Doe",
                     jobTitle = "Software Developer",
                     state = ApplicationState.RECEIVED,
-                    dateCreated = 100.toInstant()
+                    dateCreated = 100.toInstant(),
+                    attachments = mapOf()
                 )
             )
         }
@@ -121,7 +127,6 @@ class ApplicationControllerITest {
             }
         }
 
-
         @Test
         fun `order by dateCreated`() {
             insertApplicationWithApplicant(id = 100, dateCreated = 100.toInstant())
@@ -132,6 +137,40 @@ class ApplicationControllerITest {
 
             actualResponseDTO.asClue {
                 it.map(ApplicationDTO::id).shouldContainExactly(300, 100, 200)
+            }
+        }
+
+        // Usually, I prefer prefer a parameterized test for this but I like to demonstrate Kotest's forOne {}. Plus, this comes with less ceremony.
+        /** moreover, a null value in the db should be mapped to an empty map in the DTO */
+        @Test
+        fun `attachments contains pairs of file name and file path`() {
+            insertApplicationWithApplicant(
+                id = 100,
+                attachments = """
+                    {
+                    "letter": "path/to/letter.pdf",
+                    "cv": "path/to/cv.pdf"
+                    }
+                """.trimIndent()
+            )
+            insertApplicationWithApplicant(
+                id = 200,
+                attachments = null
+            )
+
+            val actualResponseDTO = mvc.requestApplications()
+
+            actualResponseDTO.forOne { dto ->
+                dto.id shouldBe 100
+                dto.attachments.shouldContainExactly(
+                    mapOf(
+                        "letter" to "path/to/letter.pdf",
+                        "cv" to "path/to/cv.pdf"
+                    )
+                )
+            }.forOne { dto ->
+                dto.id shouldBe 200
+                dto.attachments.shouldBeEmpty()
             }
         }
     }
@@ -260,10 +299,11 @@ class ApplicationControllerITest {
     private fun insertApplicationWithApplicant(
         id: Int = 100,
         state: ApplicationState = ApplicationState.REJECTED,
-        dateCreated: Instant = 1.toInstant()
+        dateCreated: Instant = 1.toInstant(),
+        attachments: String? = null
     ) {
         testDAO.insert(createApplicantEntity(id = id, firstName = "John", lastName = "Doe"))
-        testDAO.insert(createApplicationEntity(id = id, applicantId = id, state = state, dateCreated = dateCreated))
+        testDAO.insert(createApplicationEntity(id = id, applicantId = id, state = state, dateCreated = dateCreated, attachments = attachments))
     }
 }
 

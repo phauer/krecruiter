@@ -22,10 +22,12 @@
     
 ## Hands-On Part 2: Integration Tests
 
-- Migrate all tests from part 1 to the integration test `ApplicationControllerITest`. For this, wire the real objects together (not mocks) and test all layers at once (Controller, DAO, Client). Only migrate those tests that describe behavior of the service that is visible outside of it (ingoing requests, changed databases entries, outgoing responses). Internals (like internal data structures, exceptions, outcome objects) are implementation details and not relevant. Only the resulting behavior of those internals are relevant.
+- Migrate all tests from part 1 to the integration test `ApplicationControllerITest`. For this, wire the real objects together (not mocks) and test all layers at once (Controller, DAO, Client). Only migrate those tests that describe behavior of the service that is visible outside of it (ingoing requests, changed databases entries, outgoing responses). Internals (like internal data structures, exceptions, outcome objects) are implementation details are not relevant. Only the resulting behavior of those internals are relevant.
+- When `GET`ing an application, its attachments should be returned (as pairs of file name and file path) if the database entry contains attachments.
+    - e.g. the string `{"letter": "path/to/letter.pdf", "cv": "path/to/cv.pdf"}` in the database column `attachments` should be returned in the HTTP JSON payload.
+    - A `null` in the database should be mapped to an empty map in the JSON payload.
 - Don't create an application and return a 400 if an required JSON field is missing. Test this with all fields (because all fields are required).
 - Don't create an application and return a 400 if an invalid JSON is passed. Try at least the strings "", "asdf", "2", "{}", "[]".
-
 
 ## Hands-On Part 3: Kotest, Table-Driven Testing, Property-Based Testing
 

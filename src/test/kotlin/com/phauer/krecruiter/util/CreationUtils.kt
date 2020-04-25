@@ -11,13 +11,15 @@ fun createApplicationEntity(
     applicantId: Int,
     jobTitle: String = "Test Job Title",
     state: ApplicationState = ApplicationState.RECEIVED,
-    dateCreated: Instant = 1.toInstant()
+    dateCreated: Instant = 1.toInstant(),
+    attachments: String? = null
 ) = ApplicationEntity(
     id = id,
     applicantId = applicantId,
     jobTitle = jobTitle,
     state = state,
-    dateCreated = dateCreated
+    dateCreated = dateCreated,
+    attachments = attachments
 )
 
 fun createApplicantEntity(

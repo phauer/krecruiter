@@ -8,7 +8,8 @@ data class ApplicationDTO(
     val fullName: String,
     val jobTitle: String,
     val state: ApplicationState,
-    val dateCreated: Instant
+    val dateCreated: Instant,
+    val attachments: Map<String, String>
 )
 
 data class ApplicationCreationDTO(

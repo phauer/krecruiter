@@ -3,6 +3,7 @@ package com.phauer.krecruiter.applicationApi
 import com.phauer.krecruiter.common.ApiPaths
 import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.common.Outcome
+import com.phauer.krecruiter.util.TestObjects
 import com.phauer.krecruiter.util.createApplicantEntity
 import com.phauer.krecruiter.util.createMockMvc
 import com.phauer.krecruiter.util.requestApplications
@@ -31,7 +32,8 @@ internal class ApplicationControllerTest {
     private val controller = ApplicationController(
         dao = dao,
         clock = clock,
-        addressValidationClient = addressValidationClient
+        addressValidationClient = addressValidationClient,
+        mapper = TestObjects.mapper
     )
     private val mvc = createMockMvc(controller)
 
@@ -52,7 +54,8 @@ internal class ApplicationControllerTest {
                     lastName = "Doe",
                     jobTitle = "Software Developer",
                     state = ApplicationState.RECEIVED,
-                    dateCreated = 100.toInstant()
+                    dateCreated = 100.toInstant(),
+                    attachments = null
                 )
             )
 
@@ -64,7 +67,8 @@ internal class ApplicationControllerTest {
                     fullName = "John Doe",
                     jobTitle = "Software Developer",
                     state = ApplicationState.RECEIVED,
-                    dateCreated = 100.toInstant()
+                    dateCreated = 100.toInstant(),
+                    attachments = mapOf()
                 )
             )
         }

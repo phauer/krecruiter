@@ -37,8 +37,8 @@ interface TestDAO : SqlObject {
     fun insert(@BindBean vararg applicants: ApplicantEntity)
 
     @SqlBatch(
-        """INSERT INTO application(id, applicantId, jobTitle, state, dateCreated)
-            VALUES (:id, :applicantId, :jobTitle, :state, :dateCreated)"""
+        """INSERT INTO application(id, applicantId, jobTitle, state, attachments, dateCreated)
+            VALUES (:id, :applicantId, :jobTitle, :state, :attachments, :dateCreated)"""
     )
     fun insert(@BindBean vararg applications: ApplicationEntity)
 }

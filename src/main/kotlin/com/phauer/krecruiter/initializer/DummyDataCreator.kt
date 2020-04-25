@@ -1,5 +1,6 @@
 package com.phauer.krecruiter.initializer
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.javafaker.Faker
 import com.phauer.krecruiter.common.ApplicantEntity
 import com.phauer.krecruiter.common.ApplicationEntity
@@ -17,7 +18,8 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class SchemaInitializer(
-    jdbi: Jdbi
+    jdbi: Jdbi,
+    private val mapper: ObjectMapper
 ) : ApplicationRunner {
     private val log by logger()
     private val faker = Faker()
@@ -55,7 +57,15 @@ class SchemaInitializer(
             applicantId = applicants.random().id,
             jobTitle = faker.job().title(),
             state = ApplicationState.values().random(),
-            dateCreated = faker.date().past(4000, TimeUnit.DAYS).toInstant()
+            dateCreated = faker.date().past(4000, TimeUnit.DAYS).toInstant(),
+            attachments = if (faker.bool().bool()) {
+                val attachmentMap = (0..faker.number().numberBetween(1, 4)).associate {
+                    faker.lorem().sentence(1) to faker.file().fileName()
+                }
+                mapper.writeValueAsString(attachmentMap)
+            } else {
+                null
+            }
         )
     }
 
@@ -69,8 +79,8 @@ private interface DummyDataCreatorDAO : SqlObject {
     fun insertApplicants(@BindBean applicants: List<ApplicantEntity>)
 
     @SqlBatch(
-        """INSERT INTO application(id, applicantId, jobTitle, state, dateCreated)
-        VALUES (:id, :applicantId, :jobTitle, :state, :dateCreated)"""
+        """INSERT INTO application(id, applicantId, jobTitle, state, attachments, dateCreated)
+        VALUES (:id, :applicantId, :jobTitle, :state, :attachments, :dateCreated)"""
     )
     fun insertApplications(@BindBean applications: List<ApplicationEntity>)
 

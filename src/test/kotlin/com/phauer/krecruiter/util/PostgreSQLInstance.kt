@@ -1,5 +1,6 @@
 package com.phauer.krecruiter.util
 
+import com.phauer.krecruiter.SpringConfiguration
 import org.flywaydb.core.Flyway
 import org.jdbi.v3.core.Jdbi
 import org.postgresql.ds.PGSimpleDataSource
@@ -13,12 +14,12 @@ object PostgreSQLInstance {
     val jdbi: Jdbi by lazy {
         val dataSource = createDataSource()
         Flyway.configure().dataSource(dataSource).load().migrate()
-        Jdbi.create(dataSource).installPlugins()
+        SpringConfiguration().jdbi(dataSource)
     }
 
-    private fun createDataSource(): DataSource = if (isRunningLocally("localhost", 6000)) {
+    private fun createDataSource(): DataSource = if (isRunningLocally("localhost", 5432)) {
         PGSimpleDataSource().apply {
-            setUrl("jdbc:postgresql://localhost:6000/krecruiter")
+            setUrl("jdbc:postgresql://localhost:5432/krecruiter")
             user = "user"
             password = "password"
         }

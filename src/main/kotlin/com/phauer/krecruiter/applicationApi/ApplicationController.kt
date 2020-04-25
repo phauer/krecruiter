@@ -1,5 +1,6 @@
 package com.phauer.krecruiter.applicationApi
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.phauer.krecruiter.common.ApiPaths
 import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.common.Outcome
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
 import java.time.Clock
+import java.util.HashMap
 
 
 @RestController
@@ -20,7 +22,8 @@ import java.time.Clock
 class ApplicationController(
     private val dao: ApplicationDAO,
     private val addressValidationClient: AddressValidationClient,
-    private val clock: Clock
+    private val clock: Clock,
+    private val mapper: ObjectMapper
 ) {
     @GetMapping
     fun getApplications(
@@ -53,13 +56,15 @@ class ApplicationController(
         val applicationId = dao.createApplication(applicationDto.jobTitle, applicantId, ApplicationState.RECEIVED, now)
         return applicationId
     }
+
+    private fun ApplicationWithApplicantsEntity.mapToDto() = ApplicationDTO(
+        id = this.id,
+        fullName = "${this.firstName} ${this.lastName}",
+        jobTitle = this.jobTitle,
+        state = this.state,
+        dateCreated = this.dateCreated,
+        attachments = this.attachments?.let { mapper.readValue(it, mapType) as Map<String, String> } ?: emptyMap()
+    )
+
+    private val mapType = mapper.typeFactory.constructMapType(HashMap::class.java, String::class.java, String::class.java)
 }
-
-private fun ApplicationWithApplicantsEntity.mapToDto() = ApplicationDTO(
-    id = this.id,
-    fullName = "${this.firstName} ${this.lastName}",
-    jobTitle = this.jobTitle,
-    state = this.state,
-    dateCreated = this.dateCreated
-)
-

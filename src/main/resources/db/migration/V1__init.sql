@@ -14,5 +14,6 @@ CREATE TABLE IF NOT EXISTS application
     applicantId INTEGER REFERENCES applicant (id),
     jobTitle    VARCHAR(120),
     state       VARCHAR(50),
+    attachments JSON default null,
     dateCreated TIMESTAMP
 )

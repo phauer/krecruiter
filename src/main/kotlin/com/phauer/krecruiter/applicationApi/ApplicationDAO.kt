@@ -4,6 +4,7 @@ import com.phauer.krecruiter.common.ApplicationState
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.mapTo
 import org.jdbi.v3.core.kotlin.withHandleUnchecked
+import org.jdbi.v3.json.Json
 import org.springframework.stereotype.Component
 import java.time.Instant
 
@@ -16,7 +17,7 @@ class ApplicationDAO(
             val sql = buildString {
                 append(
                     """
-                    SELECT a.id, p.firstName, p.lastName, a.jobTitle, a.state, a.dateCreated 
+                    SELECT a.id, p.firstName, p.lastName, a.jobTitle, a.state, a.attachments, a.dateCreated 
                     FROM application as a LEFT JOIN applicant as p
                     ON a.applicantId = p.id
                 """
@@ -77,5 +78,7 @@ data class ApplicationWithApplicantsEntity(
     val lastName: String,
     val jobTitle: String,
     val state: ApplicationState,
+    @get:Json
+    val attachments: String?,
     val dateCreated: Instant
 )
