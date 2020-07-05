@@ -140,7 +140,7 @@ class ApplicationControllerITest {
             }
         }
 
-        // Usually, I prefer prefer a parameterized test for this but I like to demonstrate Kotest's forOne {}. Plus, this comes with less ceremony.
+        // Usually, I prefer a parameterized test for this but I like to demonstrate Kotest's forOne {}. Plus, this comes with less ceremony.
         /** moreover, a null value in the db should be mapped to an empty map in the DTO */
         @Test
         fun `attachments contains pairs of file name and file path`() {
@@ -168,7 +168,8 @@ class ApplicationControllerITest {
                         "cv" to "path/to/cv.pdf"
                     )
                 )
-            }.forOne { dto ->
+            }
+            actualResponseDTO.forOne { dto ->
                 dto.id shouldBe 200
                 dto.attachments.shouldBeEmpty()
             }

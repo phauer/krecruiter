@@ -21,7 +21,7 @@
         <jdbi.version>3.13.0</jdbi.version>
         <okhttp.version>4.2.1</okhttp.version>
         <jackson.version>2.10.0</jackson.version>
-        <kotest.version>4.0.3</kotest.version>
+        <kotest.version>4.1.1</kotest.version>
     </properties>
 
     <dependencies>
@@ -146,6 +146,13 @@
         <dependency>
             <groupId>io.kotest</groupId>
             <artifactId>kotest-property-jvm</artifactId>
+            <version>${kotest.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- important for proper tooling in IDEA -->
+        <dependency>
+            <groupId>io.kotest</groupId>
+            <artifactId>kotest-runner-console-jvm</artifactId>
             <version>${kotest.version}</version>
             <scope>test</scope>
         </dependency>
