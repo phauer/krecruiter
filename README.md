@@ -4,15 +4,23 @@ Example application to improve your testing skills with Kotlin.
 
 # Setup
 
+We like to have a setup that is as practical as possible. A real setup includes databases and remote services. That's why we have to install some tools (like Docker) to simplify the handling those external dependencies for local development and testing.  
+
 ## Requirements
+
+Please install the following software on your machine:
 
 - [Docker](https://docs.docker.com/install/)
 - [Docker-Compose](https://docs.docker.com/compose/install/)
 - Java 11 (e.g. via [SDKMan](https://sdkman.io/))
 - IntelliJ IDEA
-- IntelliJ IDEA Plugin "Kotest"
+- Latest IntelliJ IDEA Plugins (File > Settings > Plugins > Marketplace)
+    - "Kotlin"
+    - "Kotest"
 
 ## Checkout, Build, Run
+
+Let's set up this project.
 
 Checkout:
 
@@ -38,10 +46,31 @@ Test the application by opening [http://localhost:8080/applications](http://loca
 curl localhost:8080/applications
 ```
 
+You should see a payload like this:
+
+```json
+[
+  {
+    "id": 11600000,
+    "fullName": "Rolf Goldner",
+    "jobTitle": "International Engineer",
+    "state": "EMPLOYED",
+    "dateCreated": 1254806649.781000000,
+    "attachments": {
+       "Quasi laborum natus.": "eligendi_quis/accusantium.gif",
+       "Ea maxime.": "dolor_ad/voluptatem.csv"     
+    }
+  },
+  {
+    ... 
+  }
+]
+```
+
 ## Optional
 
 - HTTP Client [httpie](https://httpie.org/) or [Postman](https://www.getpostman.com/) to try the HTTP API 
-- You can download the sources of all libraries up front using `./mvnw dependency:sources`. This eases code navigation in IntelliJ. 
+- You can download the sources (and javadoc) of all libraries up front using `./mvnw dependency:sources`. This eases code navigation in IntelliJ. 
 
 ## Inspect the PostgreSQL
 
