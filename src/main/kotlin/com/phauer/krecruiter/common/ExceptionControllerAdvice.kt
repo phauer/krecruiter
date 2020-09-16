@@ -11,7 +11,7 @@ class ExceptionControllerAdvice {
 
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun exception(ex: HttpMessageNotReadableException) = when (val cause = ex.cause) {
-        is MissingKotlinParameterException -> ResponseEntity.badRequest().body("""{"errorMessage":"${cause.msg}"}""")
+        is MissingKotlinParameterException -> ResponseEntity.badRequest().body("""{"errorMessage":"${cause.message}"}""")
         else -> ResponseEntity.badRequest().body(ex.message)
     }
 

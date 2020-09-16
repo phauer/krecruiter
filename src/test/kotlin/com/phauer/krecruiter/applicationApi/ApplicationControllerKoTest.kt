@@ -36,7 +36,7 @@ import org.springframework.test.web.servlet.post
 import java.time.Clock
 import java.time.Instant
 
-class ApplicationControllerKotest : FreeSpec() {
+class ApplicationControllerKoTest : FreeSpec() {
 
     private val clock = mockk<Clock>()
     private val validationService = createStartedMockServer()
