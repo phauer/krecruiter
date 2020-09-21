@@ -32,10 +32,8 @@ internal class AddressValidationClientTest {
 
         val response = client.validateAddress("Long Street", "Leipzig")
 
-        response.shouldBeInstanceOf<Outcome.Success<AddressValidationResponseDTO>> { success ->
-            val expectedDTO = AddressValidationResponseDTO(address = "Long Street", valid = true)
-            success.value shouldBe expectedDTO
-        }
+        response.shouldBeInstanceOf<Outcome.Success<AddressValidationResponseDTO>>()
+        response.value shouldBe AddressValidationResponseDTO(address = "Long Street", valid = true)
     }
 
     @Test
