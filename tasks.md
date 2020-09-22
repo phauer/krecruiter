@@ -5,7 +5,7 @@
 Branch: `part-1`
 
 - `ApplicationDAO`
-    - Tip: With `PostgreSQLInstance.jdbi` you can create a `Jdbi` instance which can be passed to the `ApplicationDAO`. The `TestDAO` can be used to useful functions to create the schema and fill the table with test data.
+    - Tip: With `PostgreSQLInstance.jdbi` you can create a `Jdbi` instance which can be passed to the `ApplicationDAO`. The `TestDAO` can be used to useful functions to create the schema and fill the table with test data. It can be created with `PostgreSQLInstance.jdbi.onDemand<TestDAO>()`.
     - Filtering by `ApplicationState` should only return the applications with the requested state.
 
 ## Hands-On Part 2: Basic Setup with Mocks
