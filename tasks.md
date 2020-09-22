@@ -2,11 +2,15 @@
 
 ## Hands-On Part 1: Basic Setup and Naming
 
+Branch: `part-1`
+
 - `ApplicationDAO`
     - Tip: With `PostgreSQLInstance.jdbi` you can create a `Jdbi` instance which can be passed to the `ApplicationDAO`. The `TestDAO` can be used to useful functions to create the schema and fill the table with test data.
     - Filtering by `ApplicationState` should only return the applications with the requested state.
 
 ## Hands-On Part 2: Basic Setup with Mocks
+
+Branch: `part-2`
 
 - `ApplicationController`
     - Tip: Check out the file `util/MockMvcUtils.kt` in the test folder. It contains many useful functions to use Spring's MockMvc API.
@@ -15,6 +19,8 @@
         - A `GET` request on `/applications` should return a list of JSON documents with the fields `id`, `fullName`, `jobTitle`, `state` and `dateCreated` from the database. 
 
 ## Hands-On Part 3: Mock-Based Unit Tests
+
+Branch: `part-3`
 
 - `ApplicationDAO`
     - Return all applications if no state is requested.
@@ -32,6 +38,8 @@
     
 ## Hands-On Part 4: Integration Tests
 
+Branch: `part-4`
+
 - Migrate all tests from part 1 to the integration test `ApplicationControllerITest`. For this, wire the real objects together (not mocks) and test all layers at once (Controller, DAO, Client). Only migrate those tests that describe behavior of the service that is visible outside of it (ingoing requests, changed databases entries, outgoing responses). Internals (like internal data structures, exceptions, outcome objects) are implementation details are not relevant. Only the resulting behavior of those internals are relevant.
 - When `GET`ing an application, its attachments should be returned (as pairs of file name and file path) if the database entry contains attachments.
     - e.g. the string `{"letter": "path/to/letter.pdf", "cv": "path/to/cv.pdf"}` in the database column `attachments` should be returned in the HTTP JSON payload.
@@ -40,6 +48,8 @@
 - Don't create an application and return a 400 if an invalid JSON is passed. Try at least the strings "", "asdf", "2", "{}", "[]".
 
 ## Hands-On Part 5: Kotest, Table-Driven Testing, Property-Based Testing
+
+Branch: `part-5`
 
 - Let's migrate our test suite `ApplicationControllerITest` from JUnit5 to Kotest.
     - A good starting point is the `FreeSpec` [testing style](https://github.com/kotest/kotest/blob/master/doc/styles.md). It supports grouping which can be used instead of JUnit5's `@Nested`.
