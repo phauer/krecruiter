@@ -134,10 +134,7 @@ Location: /applications/3
 
 ```
 
-# Tasks
+# Tasks 
 
-The tasks can be found [here](tasks.md).
-
-# Slides
-
-The slides will be linked here later.
+- The tasks can be found [here](tasks.md). 
+- **Please mind, that the `master` branch contains the solutions with all tests.** So please don't look at them if you don't want to be spoiled. :-) Instead check out the branches that are named in the [tasks.md](tasks.md) and start working from there.
