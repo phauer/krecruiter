@@ -13,7 +13,7 @@ Branch: `part-1`
 Branch: `part-2`
 
 - `ApplicationController`
-    - Tip: Check out the file `util/MockMvcUtils.kt` in the test folder. It contains many useful functions to use Spring's MockMvc API.
+    - Tip: Check out the file `util/MockMvcUtils.kt` in the test folder. It contains many useful functions to use Spring's MockMvc API. For instance, you can use `createMockMvc(controller)` to create an `mvc` object for sending HTTP requests against the controller.
     - Tip: Check out the dependencies of `ApplicationController`: The `Clock`, the `AddressValidationClient` and the `ApplicationDAO` should be mocked. For the `mapper` you can use `TestObjects.mapper`.
     - List applications (`GET /applications`)
         - A `GET` request on `/applications` should return a list of JSON documents with the fields `id`, `fullName`, `jobTitle`, `state` and `dateCreated` from the database. 
