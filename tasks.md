@@ -52,7 +52,7 @@ Branch: `part-5`
 
 - Let's migrate our test suite `ApplicationControllerITest` from JUnit5 to Kotest.
     - A good starting point is the `FreeSpec` [testing style](https://github.com/kotest/kotest/blob/master/doc/styles.md). It supports grouping which can be used instead of JUnit5's `@Nested`.
-    - First, create the fixture setup und grouping in Kotest
+    - First, create the fixture setup und grouping in Kotest. Examples can be found in the `com.phauer.krecruiter.kotest` test package.
     - Second, migrate 2 or more tests
 - Use [data-driven testing instead of parameterized tests](https://github.com/kotest/kotest/blob/master/doc/data_driven_testing.md). The tests that are checking for a 400 response are good candidates.
 - Write a [property-based test](https://github.com/kotest/kotest/blob/master/doc/property_testing.md) that generates random values for the application fields and create an application with this data.
