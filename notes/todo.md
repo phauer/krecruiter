@@ -6,7 +6,10 @@
 - restructure to 3x 2h blocks
     - adapt message to participants
 - slide 60, "Even Better: Reuse a Single Container" auf postgres umschreiben
-- update branches "part-n"
+- branch mgmt
+    - squash and merge this branch to master
+    - update branches "part-n"
+    - make repo public again
 - digital setup
     - can participants share their screen?
 
