@@ -3,7 +3,7 @@
 ## 2021 digital kkon
 
 - to do before the workshop
-    - new participants (refer to my talk)
+    - message to participants (refer to my talk)
     - branch mgmt
         - update branches "part-n"
         - make repo public again
