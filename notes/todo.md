@@ -2,15 +2,13 @@
 
 ## 2021 digital kkon
 
-- restructure to 3x 2h blocks
-    - adapt message to participants
-- slide 60, "Even Better: Reuse a Single Container" auf postgres umschreiben
-- branch mgmt
-    - squash and merge this branch to master
-    - update branches "part-n"
-    - make repo public again
-- digital setup
-    - can participants share their screen?
+- to do before the workshop
+    - new participants (refer to my talk)
+    - branch mgmt
+        - update branches "part-n"
+        - make repo public again
+    - find out:
+        - can participants share their screen?
 
 ## old
 
