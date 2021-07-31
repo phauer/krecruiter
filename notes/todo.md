@@ -2,7 +2,6 @@
 
 ## 2021 digital kkon
 
-- update libs
 - restructure to 3x 2h blocks
     - adapt message to participants
 - slide 60, "Even Better: Reuse a Single Container" auf postgres umschreiben

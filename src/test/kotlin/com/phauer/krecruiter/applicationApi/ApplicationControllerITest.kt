@@ -278,11 +278,11 @@ class ApplicationControllerITest {
                 content = json
                 contentType = MediaType.APPLICATION_JSON
             }
-                .andExpect { status { isBadRequest } }
+                .andExpect { status { is4xxClientError() } }
         }
 
         private fun postApplicationAndExpect201(requestApplication: ApplicationCreationDTO) = postApplication(requestApplication)
-            .andExpect { status { isCreated } }.andReturn().response
+            .andExpect { status { isCreated() } }.andReturn().response
 
         private fun postApplicationAndGetResponse(requestApplication: ApplicationCreationDTO) = postApplication(requestApplication)
             .andReturn().response

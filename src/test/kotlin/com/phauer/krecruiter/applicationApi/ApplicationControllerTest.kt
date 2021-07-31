@@ -137,7 +137,7 @@ internal class ApplicationControllerTest {
             .andReturn().response
 
         private fun postApplicationAndExpect201(requestApplication: ApplicationCreationDTO) = postApplication(requestApplication)
-            .andExpect { status { isCreated } }.andReturn().response
+            .andExpect { status { isCreated() } }.andReturn().response
 
         private fun postApplication(requestApplication: ApplicationCreationDTO) = mvc.post(ApiPaths.applications) {
             content = requestApplication.toJson()

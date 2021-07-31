@@ -24,7 +24,7 @@ fun MockMvc.requestApplications(
             param("state", state.toString())
         }
     }.andExpect {
-        status { isOk }
+        status { is2xxSuccessful() }
         content { contentType(MediaType.APPLICATION_JSON) }
     }.andReturn().response.contentAsString
     return TestObjects.mapper.readValue(responseString, TestObjects.applicationDtoListType)

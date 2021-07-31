@@ -53,8 +53,7 @@ class ApplicationController(
         val now = clock.instant()
         val applicantId =
             dao.createApplicant(applicationDto.firstName, applicationDto.lastName, applicationDto.street, applicationDto.city, now)
-        val applicationId = dao.createApplication(applicationDto.jobTitle, applicantId, ApplicationState.RECEIVED, now)
-        return applicationId
+        return dao.createApplication(applicationDto.jobTitle, applicantId, ApplicationState.RECEIVED, now)
     }
 
     private fun ApplicationWithApplicantsEntity.mapToDto() = ApplicationDTO(
