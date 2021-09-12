@@ -2,10 +2,6 @@
 
 ## 2021 digital kkon
 
-- to do before the workshop
-    - message to participants (refer to my talk)
-    - make repo public again
-
 ## old
 
 - more tests?:
