@@ -4,11 +4,7 @@
 
 - to do before the workshop
     - message to participants (refer to my talk)
-    - branch mgmt
-        - update branches "part-n"
-        - make repo public again
-    - find out:
-        - can participants share their screen?
+    - make repo public again
 
 ## old
 
