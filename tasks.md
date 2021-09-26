@@ -2,13 +2,13 @@
 
 Check out the branch `start` and start writing your test code there. Don't look at the `master` branch as it contains the solution and would spoil all the fun. :-)
 
-## Hands-On Part 1: Basic Setup and Naming
+## Mini Hands-On Part 1: Basic Setup and Naming
 
 - `ApplicationDAO`
     - Tip: With `PostgreSQLInstance.jdbi` you can create a `Jdbi` instance which can be passed to the `ApplicationDAO`. The `TestDAO` contains useful functions to create the schema and fill the table with test data. It can be created with `PostgreSQLInstance.jdbi.onDemand<TestDAO>()`.
     - **Test**: Filtering by `ApplicationState` should only return the applications with the requested state.
 
-## Hands-On Part 2: Basic Setup with Mocks
+## Mini Hands-On Part 2: Basic Setup with Mocks
 
 - `ApplicationController`
     - Tip: Check out the file `util/MockMvcUtils.kt` in the test folder. It contains many useful functions to use Spring's MockMvc API. For instance, you can use `createMockMvc(controller)` to create an `mvc` object for sending HTTP requests against the controller. Also, `mvc.requestApplications()` is useful to send a GET request to the controller.
