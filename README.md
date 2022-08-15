@@ -2,12 +2,6 @@
 
 Example application to improve your testing skills with Kotlin. 
 
-# Preparation  
-
-In order to build up some knowledge about testing in Kotlin, I recommend watching my talk "Deep Dive into Testing with Kotlin" at the conference day of the KKon Digital 2021. If you missed that you can check out my blog post ["Best Practices for Unit Testing in Kotlin"](https://phauer.com/2018/best-practices-unit-testing-kotlin/).
-
-If you don't have the time for any of this, that's fine. I will recap the most important take-aways briefly during the workshop.
-
 # Setup
 
 We like to have a setup that is as practical as possible. A real setup includes databases and remote services. That's why we have to install some tools (like Docker) to simplify the handling those external dependencies for local development and testing.  
