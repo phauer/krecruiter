@@ -4,18 +4,7 @@ import com.phauer.krecruiter.common.ApiPaths
 import com.phauer.krecruiter.common.ApplicantEntity
 import com.phauer.krecruiter.common.ApplicationEntity
 import com.phauer.krecruiter.common.ApplicationState
-import com.phauer.krecruiter.util.PostgreSQLInstance
-import com.phauer.krecruiter.util.TestDAO
-import com.phauer.krecruiter.util.TestObjects
-import com.phauer.krecruiter.util.createApplicantEntity
-import com.phauer.krecruiter.util.createApplicationEntity
-import com.phauer.krecruiter.util.createMockMvc
-import com.phauer.krecruiter.util.createStartedMockServer
-import com.phauer.krecruiter.util.enqueueValidationResponse
-import com.phauer.krecruiter.util.getUrl
-import com.phauer.krecruiter.util.reset
-import com.phauer.krecruiter.util.toInstant
-import com.phauer.krecruiter.util.toJson
+import com.phauer.krecruiter.util.*
 import io.kotest.assertions.asClue
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
@@ -53,7 +42,7 @@ class ApplicationControllerKoTest : FreeSpec() {
     private val mvc = createMockMvc(controller)
     private val testDAO = PostgreSQLInstance.jdbi.onDemand<TestDAO>()
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeTest(testCase: TestCase) {
         clearAllMocks()
         testDAO.clearTables()
         validationService.reset()
