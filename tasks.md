@@ -21,15 +21,15 @@ Check out the branch `start-mock-tests` and start writing your test code there. 
 - `ApplicationDAO`
   - **Test**: Return all applications if no state is requested.
   - **Test**: Order applications by `dateCreated`.
-- `AddressValidationClient`
-  - Tip: Check out the file `util/MockServerUtils.kt` in the test folder. It contains many useful functions to use the WebMockServer API.
-  - **Test**: Pass a 200 response to the caller with a success object.
-  - **Test**: Return an error object if the validation service returns a 500.
 - `ApplicationController`
   - Create an application (`POST /applications`)
     - **Test**: A `POST` request on `/applications` (containing an application as JSON in the body) creates an application and an applicant entry in the database with the posted values and the current timestamp.
     - **Test**: Reject application creation when the AddressValidationService says that the submitted address is invalid.
     - **Test**: Return a 500 status code if the request to the AddressValidationService was not successfully
+- `AddressValidationClient`
+  - Tip: Check out the file `util/MockServerUtils.kt` in the test folder. It contains many useful functions to use the WebMockServer API.
+  - **Test**: Pass a 200 response to the caller with a success object.
+  - **Test**: Return an error object if the validation service returns a 500.
 
 ## Hands-On Part 4: Integration Tests
 
