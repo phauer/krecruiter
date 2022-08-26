@@ -14,5 +14,5 @@ spring:
       enabled: "true"
 krecruiter:
   address-validation-service:
-    base-url: "http://localhost:5000"
+    base-url: "http://localhost:5001"
 

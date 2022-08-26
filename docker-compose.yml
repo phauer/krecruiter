@@ -20,5 +20,5 @@ services:
   address-validation-service:
     image: "phauer/address-validation-service-stub:latest"
     ports:
-      - "5000:5000"
+      - "5001:5000"
     stop_signal: "SIGINT" # Flask will stop gracefully on SIGINT. docker-compose tries to stop processes using SIGTERM by default, then sends SIGKILL after a delay if the process doesn't stop.
