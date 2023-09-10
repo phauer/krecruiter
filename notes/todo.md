@@ -4,6 +4,7 @@
 
 - change db schema to have only a single table left (joining the data from both tables in one). having two tables (applicant and applications) doesn't provide any benefit. it complicates the setup without any benefit for learning how to test.
 - rename "applicant" to "candidate" to remove the similarity of this word to "application".
+- [Stateful Testcontainers for Spring Boot 3.1 Dev Mode](https://learnings.aleixmorgadas.dev/p/stateful-testcontainers-for-spring) - testcontainers setup without docker-compose. [tweet](https://twitter.com/aleixmorgadas/status/1699380822816489549?t=YUJxsHHVdumVSS3T1PC_Ww&s=19)
 
 ## old
 
