@@ -35,6 +35,8 @@ Start a PostgreSQL, adminer, and the stub for the address-validation-service:
 docker-compose up
 ```
 
+If you get the error `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`, you need to start Docker. On Mac, this can be done by starting Docker Desktop.
+
 In order to run the application you have two options:
 
 - Open Project in IntelliJ (`File` > `Open...`) and start the `KRecruiterApplication.kt` via right click > "Run KRecruiterApplication.kt..."
