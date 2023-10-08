@@ -4,7 +4,7 @@ import com.phauer.krecruiter.common.ApiPaths
 import com.phauer.krecruiter.common.ApplicationState
 import com.phauer.krecruiter.common.Outcome
 import com.phauer.krecruiter.util.TestObjects
-import com.phauer.krecruiter.util.createApplicantEntity
+import com.phauer.krecruiter.util.createApplicationDTO
 import com.phauer.krecruiter.util.createMockMvc
 import com.phauer.krecruiter.util.requestApplications
 import com.phauer.krecruiter.util.toInstant
@@ -89,7 +89,7 @@ internal class ApplicationControllerTest {
             every { dao.createApplicant(any(), any(), any(), any(), any()) } returns 1
             every { dao.createApplication(any(), any(), any(), any()) } returns 10
 
-            val requestApplication = createApplicantEntity(
+            val requestApplication = createApplicationDTO(
                 firstName = "Anna",
                 lastName = "Schmidt",
                 street = "Long Street",
@@ -112,7 +112,7 @@ internal class ApplicationControllerTest {
                     valid = false
                 )
             )
-            val requestApplication = createApplicantEntity()
+            val requestApplication = createApplicationDTO()
 
             val response = postApplicationAndGetResponse(requestApplication)
 
@@ -126,7 +126,7 @@ internal class ApplicationControllerTest {
                 message = "Request Failed",
                 cause = null
             )
-            val requestApplication = createApplicantEntity()
+            val requestApplication = createApplicationDTO()
 
             val response = postApplicationAndGetResponse(requestApplication)
 

@@ -38,7 +38,7 @@ fun createApplicantEntity(
     dateCreated = dateCreated
 )
 
-fun createApplicantEntity(
+fun createApplicationDTO(
     firstName: String = "John",
     lastName: String = "Doe",
     street: String = "Short Ave",

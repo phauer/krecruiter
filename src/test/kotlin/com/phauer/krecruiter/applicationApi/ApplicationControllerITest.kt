@@ -8,6 +8,7 @@ import com.phauer.krecruiter.util.PostgreSQLInstance
 import com.phauer.krecruiter.util.TestDAO
 import com.phauer.krecruiter.util.TestObjects
 import com.phauer.krecruiter.util.createApplicantEntity
+import com.phauer.krecruiter.util.createApplicationDTO
 import com.phauer.krecruiter.util.createApplicationEntity
 import com.phauer.krecruiter.util.createMockMvc
 import com.phauer.krecruiter.util.createStartedMockServer
@@ -183,7 +184,7 @@ class ApplicationControllerITest {
         fun `posting an application creates an application and an applicant entry in the database with the posted values and the current timestamp`() {
             mockClock(1.toInstant())
             validationService.enqueueValidationResponse(code = 200, valid = true)
-            val requestApplication = createApplicantEntity(
+            val requestApplication = createApplicationDTO(
                 firstName = "Anna",
                 lastName = "Schmidt",
                 street = "Long Street",
@@ -210,7 +211,7 @@ class ApplicationControllerITest {
         @Test
         fun `reject application with invalid address`() {
             validationService.enqueueValidationResponse(code = 200, valid = false)
-            val requestApplication = createApplicantEntity()
+            val requestApplication = createApplicationDTO()
 
             val response = postApplicationAndGetResponse(requestApplication)
 
@@ -221,7 +222,7 @@ class ApplicationControllerITest {
         @Test
         fun `return server error if the address validation service returns 500`() {
             validationService.enqueue(MockResponse().setResponseCode(500))
-            val requestApplication = createApplicantEntity()
+            val requestApplication = createApplicationDTO()
 
             val response = postApplicationAndGetResponse(requestApplication)
 
