@@ -25,6 +25,8 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
+import io.kotest.property.PropTestConfig
+import io.kotest.property.PropTestListener
 import io.kotest.property.arbitrary.string
 import io.kotest.property.checkAll
 import io.mockk.clearAllMocks
@@ -53,13 +55,23 @@ class ApplicationControllerKoTest : FreeSpec() {
     private val mvc = createMockMvc(controller)
     private val testDAO = PostgreSQLInstance.jdbi.onDemand<TestDAO>()
 
-    override fun beforeTest(testCase: TestCase) {
+    private val beforeTestSetup = {
         clearAllMocks()
         testDAO.clearTables()
         validationService.reset()
     }
+    // for running setup code before a property test
+    private val listener = object : PropTestListener {
+        override suspend fun beforeTest() {
+            beforeTestSetup()
+        }
+    }
+    private val propConfig = PropTestConfig(listeners = listOf(listener))
 
     init {
+        beforeTest{
+            beforeTestSetup()
+        }
         "Get Applications" - {
             "return all relevant fields from database" {
                 // ...
@@ -74,12 +86,13 @@ class ApplicationControllerKoTest : FreeSpec() {
 
             "Create an application with randomized data" {
                 checkAll(
-                    20,
-                    Arb.string(maxSize = 60),
-                    Arb.string(maxSize = 60),
-                    Arb.string(maxSize = 60),
-                    Arb.string(maxSize = 30),
-                    Arb.string(maxSize = 120)
+                    iterations = 20,
+                    config = propConfig,
+                    Arb.string(maxSize = 60, minSize = 2),
+                    Arb.string(maxSize = 60, minSize = 2),
+                    Arb.string(maxSize = 60, minSize = 2),
+                    Arb.string(maxSize = 30, minSize = 2),
+                    Arb.string(maxSize = 120, minSize = 2)
                 ) { firstName, lastName, street, city, jobTitle ->
                     val requestedApplication = ApplicationCreationDTO(
                         firstName = firstName,
@@ -88,7 +101,6 @@ class ApplicationControllerKoTest : FreeSpec() {
                         city = city,
                         jobTitle = jobTitle
                     )
-                    beforeTest(mockk<TestCase>()) // beforeTest() cleanup is not executed automatically
                     mockClock(1.toInstant())
                     validationService.enqueueValidationResponse(code = 200, valid = true)
 

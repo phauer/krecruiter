@@ -26,8 +26,8 @@
 
         <!-- test -->
         <testcontainers.version>1.19.7</testcontainers.version>
-        <kotest.version>4.6.1</kotest.version>
-        <mockk.version>1.12.0</mockk.version>
+        <kotest.version>5.7.2</kotest.version>
+        <mockk.version>1.13.10</mockk.version>
     </properties>
 
     <dependencies>
@@ -130,7 +130,7 @@
         </dependency>
         <dependency>
             <groupId>io.mockk</groupId>
-            <artifactId>mockk</artifactId>
+            <artifactId>mockk-jvm</artifactId>
             <version>${mockk.version}</version>
             <scope>test</scope>
         </dependency>
@@ -152,6 +152,16 @@
             <version>${kotest.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- fixing "java.lang.NoClassDefFoundError:
+        kotlinx.coroutines.DelayWithTimeoutDiagnostics" when running kotest -->
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core-jvm</artifactId>
+            <version>1.8.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
