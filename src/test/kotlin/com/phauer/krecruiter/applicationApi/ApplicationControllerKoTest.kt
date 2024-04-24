@@ -18,7 +18,6 @@ import com.phauer.krecruiter.util.toInstant
 import com.phauer.krecruiter.util.toJson
 import io.kotest.assertions.asClue
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.core.test.TestCase
 import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.nulls.shouldBeNull
@@ -61,12 +60,11 @@ class ApplicationControllerKoTest : FreeSpec() {
         validationService.reset()
     }
     // for running setup code before a property test
-    private val listener = object : PropTestListener {
+    private val propTestConfig = PropTestConfig(listeners = listOf(object : PropTestListener {
         override suspend fun beforeTest() {
             beforeTestSetup()
         }
-    }
-    private val propConfig = PropTestConfig(listeners = listOf(listener))
+    }))
 
     init {
         beforeTest{
@@ -87,7 +85,7 @@ class ApplicationControllerKoTest : FreeSpec() {
             "Create an application with randomized data" {
                 checkAll(
                     iterations = 20,
-                    config = propConfig,
+                    config = propTestConfig,
                     Arb.string(maxSize = 60, minSize = 2),
                     Arb.string(maxSize = 60, minSize = 2),
                     Arb.string(maxSize = 60, minSize = 2),
