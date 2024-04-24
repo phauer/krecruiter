@@ -54,6 +54,7 @@ class ApplicationControllerKoTest : FreeSpec() {
     private val mvc = createMockMvc(controller)
     private val testDAO = PostgreSQLInstance.jdbi.onDemand<TestDAO>()
 
+    // define setup code to make it reuseable for normal and prop-based tests.
     private val beforeTestSetup = {
         clearAllMocks()
         testDAO.clearTables()
@@ -67,6 +68,7 @@ class ApplicationControllerKoTest : FreeSpec() {
     }))
 
     init {
+        // for running setup code before normal tests (not property tests)
         beforeTest{
             beforeTestSetup()
         }
