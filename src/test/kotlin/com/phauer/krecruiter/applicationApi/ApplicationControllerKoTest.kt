@@ -88,11 +88,11 @@ class ApplicationControllerKoTest : FreeSpec() {
                 checkAll(
                     iterations = 20,
                     config = propTestConfig,
-                    Arb.string(maxSize = 60, minSize = 2),
-                    Arb.string(maxSize = 60, minSize = 2),
-                    Arb.string(maxSize = 60, minSize = 2),
-                    Arb.string(maxSize = 30, minSize = 2),
-                    Arb.string(maxSize = 120, minSize = 2)
+                    Arb.string(maxSize = 60),
+                    Arb.string(maxSize = 60),
+                    Arb.string(maxSize = 60),
+                    Arb.string(maxSize = 30),
+                    Arb.string(maxSize = 120)
                 ) { firstName, lastName, street, city, jobTitle ->
                     val requestedApplication = ApplicationCreationDTO(
                         firstName = firstName,
