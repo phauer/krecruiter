@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <kotlin.version>1.9.23</kotlin.version>
 
         <!-- prod -->
@@ -160,6 +160,17 @@
             <artifactId>kotlinx-coroutines-core-jvm</artifactId>
             <version>1.8.0</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- fixing " java.lang.UnsupportedOperationException: class redefinition failed:
+        attempted to change the class NestHost, NestMembers, Record, or PermittedSubclasses attribute"
+        by forcing latest byte-buddy version that is compatible with JVM 17. mockk and spring used an older version.
+        see https://github.com/mockk/mockk/issues/1041#issuecomment-1517049220
+        -->
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.14.14</version>
         </dependency>
 
     </dependencies>
