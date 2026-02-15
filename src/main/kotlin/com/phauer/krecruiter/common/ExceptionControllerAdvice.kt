@@ -1,6 +1,6 @@
 package com.phauer.krecruiter.common
 
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
+import com.fasterxml.jackson.module.kotlin.KotlinInvalidNullException
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -11,7 +11,7 @@ class ExceptionControllerAdvice {
 
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun exception(ex: HttpMessageNotReadableException) = when (val cause = ex.cause) {
-        is MissingKotlinParameterException -> ResponseEntity.badRequest().body("""{"errorMessage":"${cause.message}"}""")
+        is KotlinInvalidNullException -> ResponseEntity.badRequest().body("""{"errorMessage":"${cause.message}"}""")
         else -> ResponseEntity.badRequest().body(ex.message)
     }
 

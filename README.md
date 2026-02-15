@@ -12,7 +12,7 @@ Please install the following software on your machine:
 
 - [Docker](https://docs.docker.com/install/)
 - [Docker-Compose](https://docs.docker.com/compose/install/)
-- Java/JDK 21 (e.g. via [SDKMan](https://sdkman.io/) or IDEA's `Project Structure...` Dialog)
+- Java/JDK 25 (recommendation: IDEA's `Project Structure...` Dialog. Alternative: via [SDKMan](https://sdkman.io/))
 - IntelliJ IDEA
 - Latest IntelliJ IDEA Plugins (`File > Settings > Plugins > Marketplace`)
     - "Kotlin"
