@@ -27,7 +27,7 @@
         <!-- test -->
         <testcontainers.version>1.19.7</testcontainers.version>
         <kotest.version>5.7.2</kotest.version>
-        <mockk.version>1.13.10</mockk.version>
+        <mockk.version>1.14.9</mockk.version>
     </properties>
 
     <dependencies>
