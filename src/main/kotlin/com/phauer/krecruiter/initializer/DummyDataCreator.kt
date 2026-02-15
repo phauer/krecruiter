@@ -23,7 +23,7 @@ class SchemaInitializer(
 ) : ApplicationRunner {
     private val log by logger()
     private val faker = Faker()
-    private val applicantAmount = 500
+    private val applicantAmount = 10
     private val dao = jdbi.onDemand(DummyDataCreatorDAO::class.java)
 
     override fun run(args: ApplicationArguments) {
