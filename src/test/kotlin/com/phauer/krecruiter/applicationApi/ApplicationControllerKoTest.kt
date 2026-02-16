@@ -18,8 +18,7 @@ import com.phauer.krecruiter.util.toInstant
 import com.phauer.krecruiter.util.toJson
 import io.kotest.assertions.asClue
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import io.kotest.datatest.withTests
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -122,35 +121,34 @@ class ApplicationControllerKoTest : FreeSpec() {
             }
 
             "dont create an application and return a 400 if an required JSON field is missing." - {
-                forAll( // there are two forall methods. import the one in the suspend package
-                    row(MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = "street", city = "city", jobTitle = null)),
-                    row(MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = "street", city = null, jobTitle = "title")),
-                    row(MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = null, city = "city", jobTitle = "title")),
-                    row(MissingFieldApplicationDTO(firstName = "name1", lastName = null, street = "street", city = "city", jobTitle = "title")),
-                    row(MissingFieldApplicationDTO(firstName = null, lastName = "name2", street = "street", city = "city", jobTitle = "title"))
-                ) { dtoWithMissingField: MissingFieldApplicationDTO ->
-                    "DTO with missing field: $dtoWithMissingField" {
-                        postApplicationAndExpect400(dtoWithMissingField.toJson())
-                        testDAO.findOneApplication().shouldBeNull()
-                        testDAO.findOneApplicant().shouldBeNull()
-                    }
+                withTests(
+                    nameFn = { "DTO with missing field: $it" },
+                    MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = "street", city = "city", jobTitle = null),
+                    MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = "street", city = null, jobTitle = "title"),
+                    MissingFieldApplicationDTO(firstName = "name1", lastName = "name2", street = null, city = "city", jobTitle = "title"),
+                    MissingFieldApplicationDTO(firstName = "name1", lastName = null, street = "street", city = "city", jobTitle = "title"),
+                    MissingFieldApplicationDTO(firstName = null, lastName = "name2", street = "street", city = "city", jobTitle = "title")
+                ) { dtoWithMissingField ->
+                    postApplicationAndExpect400(dtoWithMissingField.toJson())
+                    testDAO.findOneApplication().shouldBeNull()
+                    testDAO.findOneApplicant().shouldBeNull()
                 }
             }
 
             "dont create an application and return a 400 if an invalid JSON is passed" - {
-                forAll( // there are two forall methods. import the one in the suspend package
-                    row(""""""),
-                    row("""asdfasfd"""),
-                    row("""2"""),
-                    row("""{}"""),
-                    row("""{"1":"a"}"""),
-                    row("""[]""")
-                ) { invalidJson: String ->
-                    "invalid json: $invalidJson" {
-                        postApplicationAndExpect400(invalidJson)
-                        testDAO.findOneApplication().shouldBeNull()
-                        testDAO.findOneApplicant().shouldBeNull()
-                    }
+                withTests(
+                    mapOf(
+                        "empty string" to "",
+                        "random text" to "asdfasfd",
+                        "number" to "2",
+                        "empty object" to "{}",
+                        "object with key" to """{"1":"a"}""",
+                        "empty array" to "[]"
+                    )
+                ) { invalidJson ->
+                    postApplicationAndExpect400(invalidJson)
+                    testDAO.findOneApplication().shouldBeNull()
+                    testDAO.findOneApplicant().shouldBeNull()
                 }
             }
 
