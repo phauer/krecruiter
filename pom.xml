@@ -176,6 +176,7 @@
                 <configuration>
                     <args>
                         <arg>-Xjsr305=strict</arg>
+                        <arg>-opt-in=io.kotest.common.ExperimentalKotest</arg>
                     </args>
                     <compilerPlugins>
                         <plugin>spring</plugin>

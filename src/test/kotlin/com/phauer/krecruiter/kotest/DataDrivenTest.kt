@@ -14,7 +14,7 @@ class DataDrivenTest : FreeSpec() {
                 Pair("151175_13521", Token(151175, "13521")),
                 Pair("151144375_id", Token(151144375, "id")),
                 Pair("1511443759_1", Token(1511443759, "1")),
-                Pair(null as String?, null as Token?)
+                Pair(null, null)
             ) { (input, expected) ->
                 parse(input).shouldBe(expected)
             }
