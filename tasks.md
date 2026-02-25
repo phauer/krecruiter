@@ -42,7 +42,7 @@ You can check out the branch `start-integration-tests` and start coding there. I
 - **Test**: Don't create an application and return a 400 if an required JSON field is missing. Test this with all fields (because all fields are required).
 - **Test**: Don't create an application and return a 400 if an invalid JSON is passed. Try at least the strings "", "asdf", "2", "{}", "[]".
 
-## Hands-On Part 5: Kotest, Table-Driven Testing, Property-Based Testing
+## Hands-On Part 5: Kotest, Data-Driven Testing, Property-Based Testing
 
 You can check out the branch `start-kotest` and start coding there. It contains the solution of the previous tasks.
 

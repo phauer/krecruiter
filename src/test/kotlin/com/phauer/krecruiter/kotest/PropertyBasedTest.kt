@@ -9,7 +9,7 @@ import io.kotest.property.checkAll
 class PropertyBasedTest : FreeSpec() {
     init {
         "String size" {
-            checkAll(500, Arb.string(maxSize = 10), Arb.string(maxSize = 10)) { a: String, b: String ->
+            checkAll(iterations = 500, Arb.string(maxSize = 10), Arb.string(maxSize = 10)) { a: String, b: String ->
                 (a + b).shouldHaveLength(a.length + b.length)
             }
         }
